@@ -2,8 +2,8 @@
 #include <allegro5/allegro_image.h>
 #include <stdio.h>
 
-const int LARGURA_TELA = 960;
-const int ALTURA_TELA = 720;
+const int LARGURA_TELA = 920;
+const int ALTURA_TELA = 612;
 
 struct botao{
     ALLEGRO_BITMAP *ativado;
