@@ -5,10 +5,14 @@
 const int LARGURA_TELA = 960;
 const int ALTURA_TELA = 720;
 
-struct botao{
+typedef struct botao{
     ALLEGRO_BITMAP *ativado;
     ALLEGRO_BITMAP *desativado;
 } botao;
+
+struct objeto{
+    int pos_x;
+}
 
 int main(void)
 {
@@ -21,7 +25,7 @@ int main(void)
     //Variaveis que armazenarão a imagem do botão do jogo
     ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL;
     //Estrutura que armazena as imagens com os etados do botão
-    struct botao botao_novo, botao_ajuda, botao_sair;
+    botao botao_novo, botao_ajuda, botao_sair;
     int no_novo = 0, no_ajuda = 0, no_sair = 0, novo_jogo = 0, loop = 0;
 
     /*  no_novo     - Variavel de condicionamento do botão de novo jogo
