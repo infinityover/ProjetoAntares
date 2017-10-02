@@ -2,14 +2,13 @@
 #include <allegro5/allegro_image.h>
 #include <stdio.h>
 
-const int LARGURA_TELA = 737;
-const int ALTURA_TELA = 553;
+const int LARGURA_TELA = 960;
+const int ALTURA_TELA = 720;
 
-//Estrutura dos botoes da tela inicial
 struct botao{
     ALLEGRO_BITMAP *ativado;
     ALLEGRO_BITMAP *desativado;
-} botoes_iniciais;
+} botao;
 
 int main(void)
 {
@@ -22,7 +21,7 @@ int main(void)
     //Variaveis que armazenarão a imagem do botão do jogo
     ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL;
     //Estrutura que armazena as imagens com os etados do botão
-    struct botoes_iniciais botao_novo, botao_ajuda, botao_sair;
+    struct botao botao_novo, botao_ajuda, botao_sair;
     int no_novo = 0, no_ajuda = 0, no_sair = 0, novo_jogo = 0, loop = 0;
 
     /*  no_novo     - Variavel de condicionamento do botão de novo jogo
@@ -70,7 +69,7 @@ int main(void)
 
 
     // Alocando o background
-    background = al_load_bitmap("Tela_Inicial.jpg");
+    background = al_load_bitmap("img/Tela_Inicial.png");
     if (!background)
     {
         fprintf(stderr, "Falha ao criar background.\n");
@@ -80,15 +79,15 @@ int main(void)
 
 
 
-    // Alocamos o botão para novo jogo
-    botao_novo.desativado = al_load_bitmap("img/BT_Novo_Desativado.jpg");
-    botao_novo.ativado = al_load_bitmap("img/BT_Novo_Ativado.jpg");
     // Alocamos o botão para ajuda
-    botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.jpg");
-    botao_ajuda.ativado = al_load_bitmap("img/BT_Ajuda_Ativado.jpg");
+    botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
+    botao_ajuda.ativado = al_load_bitmap("img/BT_Ajuda_Ativado.png");
+    // Alocamos o botão para novo jogo
+    botao_novo.desativado = al_load_bitmap("img/BT_Novo_Desativado.png");
+    botao_novo.ativado = al_load_bitmap("img/BT_Novo_Ativado.png");
     // Alocamos o botão para fechar a aplicação
-    botao_sair.desativado = al_load_bitmap("img/BT_Sair_Desativado.jpg");
-    botao_sair.ativado = al_load_bitmap("img/BT_Sair_Ativado.jpg");
+    botao_sair.desativado = al_load_bitmap("img/BT_Sair_Desativado.png");
+    botao_sair.ativado = al_load_bitmap("img/BT_Sair_Ativado.png");
 
 
     if (!botao_novo.desativado || !botao_novo.ativado)
@@ -167,7 +166,7 @@ int main(void)
                     evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 &&
                     evento.mouse.y <= ALTURA_TELA - 60)
                 {
-                    sair = 1;
+                    loop = 1;
                 }
 
                 //Click no botão novo
@@ -183,6 +182,7 @@ int main(void)
 
         // Desenha o background na tela
         al_draw_bitmap(background, 0, 0, 0);
+        //al_draw_scaled_bitmap(background, 0, 0, 960, 720, 0, 0, 800, 600, 0);
 
         if (no_novo == 1 )
         {
