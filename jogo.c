@@ -22,7 +22,7 @@ struct tela_ativa{
 struct objeto{
     int pos_x;
     int pos_y;
-    char orientacao[1];
+    char orientacao;
     ALLEGRO_BITMAP *imagem_ativa;
     ALLEGRO_BITMAP *imagem_cima[4];
     ALLEGRO_BITMAP *imagem_baixo[4];
@@ -43,7 +43,7 @@ ALLEGRO_BITMAP *background = NULL;
 //Variaveis que armazenarão a imagem do botão do jogo
 ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL;
 ALLEGRO_TIMER *timer = NULL;
-
+int tecla_pressionada = 0;
 int main(void){
     //Estrutura que armazena as imagens com os etados do botão
     struct botao botao_novo, botao_ajuda, botao_sair;
@@ -140,23 +140,51 @@ int main(void){
             }
 
             if(novo_jogo == 1){
+              if(evento.type == ALLEGRO_EVENT_KEY_UP){
+                tecla_pressionada = 0;
+              }
+              if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1){
+                if (personagem.orientacao == 'D'){
+                    personagem.pos_x = personagem.pos_x + 10;
+                    personagem.imagem_ativa = personagem.imagem_direita[frame_ativo];
+                  } else if(personagem.orientacao == 'E'){
+                    personagem.pos_x = personagem.pos_x -10;
+                    personagem.imagem_ativa = personagem.imagem_esquerda[frame_ativo];
+                  } else if (personagem.orientacao == 'C') {
+                    personagem.pos_y = personagem.pos_y - 10;
+                    personagem.imagem_ativa = personagem.imagem_cima[frame_ativo];
+                  } else if (personagem.orientacao == 'B'){
+                    personagem.pos_y = personagem.pos_y + 10;
+                    personagem.imagem_ativa = personagem.imagem_baixo[frame_ativo];
+                  }
+                  if (frame_ativo == 3){
+                      frame_ativo = 0;
+                  } else{
+                    frame_ativo++;
+                  }
+                }
               if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+                tecla_pressionada = 1;
                   switch(evento.keyboard.keycode){
                     case ALLEGRO_KEY_UP:
                       personagem.pos_y = personagem.pos_y - 10;
                       personagem.imagem_ativa = personagem.imagem_cima[frame_ativo];
+                      personagem.orientacao = 'C';
                       break;
                     case ALLEGRO_KEY_DOWN:
                       personagem.pos_y = personagem.pos_y + 10;
                       personagem.imagem_ativa = personagem.imagem_baixo[frame_ativo];
+                      personagem.orientacao = 'B';
                       break;
                     case ALLEGRO_KEY_LEFT:
                       personagem.pos_x = personagem.pos_x -10;
                       personagem.imagem_ativa = personagem.imagem_esquerda[frame_ativo];
+                      personagem.orientacao = 'E';
                       break;
                     case ALLEGRO_KEY_RIGHT:
                       personagem.pos_x = personagem.pos_x + 10;
                       personagem.imagem_ativa = personagem.imagem_direita[frame_ativo];
+                      personagem.orientacao = 'D';
                       break;
                   }
                   if (frame_ativo == 3){
@@ -313,14 +341,6 @@ bool iniciailizar(){
       al_destroy_display(janela);
       return false;
   }
-  timer = al_create_timer(0.1);
-  if (!timer)
-  {
-      fprintf(stderr, "Falha ao criar timer.\n");
-      al_destroy_event_queue(fila_eventos);
-      al_destroy_display(janela);
-      return false;
-  }
 
   if (!al_install_keyboard())
     {
@@ -335,11 +355,21 @@ bool iniciailizar(){
         return -1;
     }
 
+    timer = al_create_timer(0.1);
+    if (!timer)
+    {
+        fprintf(stderr, "Falha ao criar timer.\n");
+        al_destroy_event_queue(fila_eventos);
+        al_destroy_display(janela);
+        return false;
+    }
+
     // Dizemos que vamos tratar os eventos vindos do mouse
     al_register_event_source(fila_eventos, al_get_mouse_event_source());
 
     al_register_event_source(fila_eventos, al_get_keyboard_event_source());
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
+    al_register_event_source(fila_eventos, al_get_timer_event_source(timer));
 
   // Atribui o cursor padrão do sistema para ser usado
   if (!al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT))
