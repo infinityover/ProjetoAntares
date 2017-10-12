@@ -17,6 +17,7 @@ struct botao{
 struct telas{
     ALLEGRO_BITMAP *tela1;
     ALLEGRO_BITMAP *tela2;
+    ALLEGRO_BITMAP *tela3;
 } telas;
 
 //estrutura de objetos das telas
@@ -37,7 +38,7 @@ struct objeto{
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
-ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL;
+ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL, *background_exibir2 = NULL;
 ALLEGRO_TIMER *timer = NULL;
 int tecla_pressionada = 0;
 const int LARGURA_TELA = 737;
@@ -45,6 +46,10 @@ const int ALTURA_TELA = 553;
 struct botao botao_novo, botao_ajuda, botao_sair;
 struct telas background;
 struct objeto personagem;
+unsigned char r, g, b;
+
+volatile int milisegundos;
+
 
 //=====================================================================================================
 //    INICIALIZAÇÃO DAS FUNÇÕES UTILIZADAS NO CÓDIGO
@@ -53,6 +58,7 @@ struct objeto personagem;
 bool inicializar();
 bool carregar_imagens();
 void finalizar();
+void msec_counter() { milisegundos++; }
 
 //=====================================================================================================
 //    CÓDIGO PRINCIPAL DO JOGO
@@ -60,6 +66,7 @@ void finalizar();
 
 int main(void){
     int no_novo = 0, no_ajuda = 0, no_sair = 0, novo_jogo = 0, loop = 0, frame_ativo = 0, ultima_tecla = 0, Etipo = 0;
+    ALLEGRO_COLOR cor;
     personagem.pos_x = 0;
     personagem.pos_y = 0;
 
@@ -214,7 +221,12 @@ int main(void){
         // aloca o background da 1ª fase
         background_exibir = background.tela2;
 
+        // aloca o background da 1ª fase
+        background_exibir2 = background.tela3;
+
         al_start_timer(timer);
+
+        int tempo_troca = 100;
         
         while (!loop)
         {          
@@ -232,31 +244,52 @@ int main(void){
                     tecla_pressionada = 0;
                 
                 if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
-                {
+                {           
                     if (personagem.orientacao == 'D')
                     {
-                        personagem.pos_x = personagem.pos_x + 10;
-                        personagem.imagem_ativa = personagem.imagem_direita[frame_ativo];
+                        cor = al_get_pixel(background_exibir2, personagem.pos_x + 10, personagem.pos_y);
+                        al_unmap_rgb(cor, &r, &g, &b);
+
+                        if (r != 255 && g != 0 && b != 255)
+                        {
+                            personagem.pos_x = personagem.pos_x + 10;
+                            personagem.imagem_ativa = personagem.imagem_direita[frame_ativo];
+                        }
                     } else if(personagem.orientacao == 'E')
                     {
-                        personagem.pos_x = personagem.pos_x -10;
-                        personagem.imagem_ativa = personagem.imagem_esquerda[frame_ativo];
+                        cor = al_get_pixel(background_exibir2, personagem.pos_x - 10, personagem.pos_y);
+                        al_unmap_rgb(cor, &r, &g, &b);
+
+                        if (r != 255 && g != 0 && b != 255)
+                        {
+                            personagem.pos_x = personagem.pos_x - 10;
+                            personagem.imagem_ativa = personagem.imagem_esquerda[frame_ativo];
+                        }
                     } else if (personagem.orientacao == 'C')
                     {
-                        personagem.pos_y = personagem.pos_y - 10;
-                        personagem.imagem_ativa = personagem.imagem_cima[frame_ativo];
+                        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y - 10);
+                        al_unmap_rgb(cor, &r, &g, &b);
+
+                        if (r != 255 && g != 0 && b != 255)
+                        {
+                            personagem.pos_y = personagem.pos_y - 10;
+                            personagem.imagem_ativa = personagem.imagem_cima[frame_ativo];
+                        }
                     } else if (personagem.orientacao == 'B')
                     {
-                        personagem.pos_y = personagem.pos_y + 10;
-                        personagem.imagem_ativa = personagem.imagem_baixo[frame_ativo];
+                        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + 10);
+                        al_unmap_rgb(cor, &r, &g, &b);
+
+                        if (r != 255 && g != 0 && b != 255)
+                        {
+                            personagem.pos_y = personagem.pos_y + 10;
+                            personagem.imagem_ativa = personagem.imagem_baixo[frame_ativo];
+                        }
                     }
                     
                     if (frame_ativo == 3)
-                    {
                         frame_ativo = 0;
-                    } else{
-                        frame_ativo++;
-                    }
+             
                 }
                 
                 if(evento.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -265,23 +298,23 @@ int main(void){
                     switch(evento.keyboard.keycode)
                     {
                         case ALLEGRO_KEY_UP:
-                            personagem.pos_y = personagem.pos_y - 10;
-                            personagem.imagem_ativa = personagem.imagem_cima[frame_ativo];
+                            //personagem.pos_y = personagem.pos_y - 10;
+                            //personagem.imagem_ativa = personagem.imagem_cima[frame_ativo];
                             personagem.orientacao = 'C';
                             break;
                         case ALLEGRO_KEY_DOWN:
-                            personagem.pos_y = personagem.pos_y + 10;
-                            personagem.imagem_ativa = personagem.imagem_baixo[frame_ativo];
+                            //personagem.pos_y = personagem.pos_y + 10;
+                            //personagem.imagem_ativa = personagem.imagem_baixo[frame_ativo];
                             personagem.orientacao = 'B';
                             break;
                         case ALLEGRO_KEY_LEFT:
-                            personagem.pos_x = personagem.pos_x -10;
-                            personagem.imagem_ativa = personagem.imagem_esquerda[frame_ativo];
+                            //personagem.pos_x = personagem.pos_x -10;
+                            //personagem.imagem_ativa = personagem.imagem_esquerda[frame_ativo];
                             personagem.orientacao = 'E';
                             break;
                         case ALLEGRO_KEY_RIGHT:
-                            personagem.pos_x = personagem.pos_x + 10;
-                            personagem.imagem_ativa = personagem.imagem_direita[frame_ativo];
+                            //personagem.pos_x = personagem.pos_x + 10;
+                            //personagem.imagem_ativa = personagem.imagem_direita[frame_ativo];
                             personagem.orientacao = 'D';
                             break;
                     }
@@ -293,10 +326,11 @@ int main(void){
                     }
                 }
                 
+
                 // Se o evento foi movimentar o mouse
                 if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
                 {
-                
+                    
                 }
                 // Se o evento foi um clique do mouse
                 else if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
@@ -304,10 +338,10 @@ int main(void){
                     
                 }
             }
-            
+
             //Desenha background
-            al_convert_mask_to_alpha(background_exibir,al_map_rgb(255,0,255));
-            al_draw_bitmap(background_exibir, 0,0,0);
+            al_convert_mask_to_alpha(background_exibir,al_map_rgb(0,0,0));
+            al_draw_bitmap(background_exibir, 0,0,0);            
 
             //Desenha Personagem quando pressionado o botão novo jogo
             al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
@@ -403,6 +437,7 @@ bool carregar_imagens()
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.bmp");
     background.tela2 = al_load_bitmap("img/Tela_Fase1.bmp");
+    background.tela3 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
 
     // Alocamos o botão para ajuda
     botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.bmp");
@@ -480,6 +515,8 @@ bool carregar_imagens()
     
     return true;
 }
+
+//int getpixel(ALLEGRO_BITMAP *bmp, int x, int y);
 
 void finalizar()
 {
