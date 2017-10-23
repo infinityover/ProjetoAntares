@@ -126,9 +126,8 @@ int tela_inicial(int loop)
 
 int fase_1(int retorno, int loop)
 {
-  int frame_ativo = 0;
-	personagem.pos_x = 0;
-  personagem.pos_y = 0;
+  //int frame_ativo = 0;
+	personagem.pos_x = 0, personagem.pos_y = 0;
   personagem.orientacao = 'C';
 
 	if (retorno == 0)
@@ -143,11 +142,9 @@ int fase_1(int retorno, int loop)
 
         al_start_timer(timer);
 
-        while (!loop)
-        {
+        while (!loop){
             // Verificamos se há eventos na fila
-            while (!al_is_event_queue_empty(fila_eventos))
-            {
+            while (!al_is_event_queue_empty(fila_eventos)){
                 al_wait_for_event(fila_eventos, &evento);
 
                 // Se o evento foi fechar o jogo
@@ -180,22 +177,13 @@ int fase_1(int retorno, int loop)
                           personagem.orientacao = 'D';
                           break;
                     }
-
-                    if (frame_ativo == 3){
-                        frame_ativo = 0;
-                    } else{
-                        frame_ativo++;
-                    }
                 }
             }
 
             //Desenha background
-            al_convert_mask_to_alpha(background_exibir,al_map_rgb(0,0,0));
             al_draw_bitmap(background_exibir, 0,0,0);
-
             //Desenha Personagem quando pressionado o botão novo jogo
             al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
-
             // Atualiza a tela
             al_flip_display();
         }
@@ -265,7 +253,7 @@ bool inicializar()
     al_register_event_source(fila_eventos, al_get_keyboard_event_source());
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
     al_register_event_source(fila_eventos, al_get_timer_event_source(timer));
-
+    al_set_window_position(janela, 300, 100);
     return true;
 }
 
