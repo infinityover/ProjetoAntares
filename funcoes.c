@@ -136,10 +136,10 @@ int fase_1(int retorno, int loop)
         loop = 0;
 
         // aloca o background da 1ª fase
-        background_exibir = background.tela2;
+        background_exibir = background_tela1.tela1;
 
         // aloca o background da 1ª fase
-        background_exibir2 = background.tela3;
+        background_exibir2 = background_tela1.tela2;
 
         al_start_timer(timer);
 
@@ -279,60 +279,60 @@ bool inicializar()
 bool carregar_imagens()
 {
     // Alocando os backgrounds
-    background.tela1 = al_load_bitmap("img/Tela_Inicial.bmp");
-    background.tela2 = al_load_bitmap("img/Tela_Fase1.bmp");
-    background.tela3 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
+    background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
+    background_tela1.tela1 = al_load_bitmap("img/Tela_Fase1.bmp");
+    background_tela1.tela2 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
 
     // Alocamos o botão para ajuda
-    botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.bmp");
-    botao_ajuda.ativado = al_load_bitmap("img/BT_Ajuda_Ativado.bmp");
+    botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
+    botao_ajuda.ativado = al_load_bitmap("img/BT_Ajuda_Ativado.png");
 
     // Alocamos o botão para novo jogo
-    botao_novo.desativado = al_load_bitmap("img/BT_Novo_Desativado.bmp");
-    botao_novo.ativado = al_load_bitmap("img/BT_Novo_Ativado.bmp");
+    botao_novo.desativado = al_load_bitmap("img/BT_Novo_Desativado.png");
+    botao_novo.ativado = al_load_bitmap("img/BT_Novo_Ativado.png");
 
     // Alocamos o botão para fechar a aplicação
-    botao_sair.desativado = al_load_bitmap("img/BT_Sair_Desativado.bmp");
-    botao_sair.ativado = al_load_bitmap("img/BT_Sair_Ativado.bmp");
+    botao_sair.desativado = al_load_bitmap("img/BT_Sair_Desativado.png");
+    botao_sair.ativado = al_load_bitmap("img/BT_Sair_Ativado.png");
 
     // Alocamos os sprites do personagem
-    personagem.imagem_baixo[0] = al_load_bitmap("testes/Sprite teste/personagem_01.png");
-    personagem.imagem_baixo[1] = al_load_bitmap("testes/Sprite teste/personagem_02.png");
-    personagem.imagem_baixo[2] = al_load_bitmap("testes/Sprite teste/personagem_03.png");
-    personagem.imagem_baixo[3] = al_load_bitmap("testes/Sprite teste/personagem_04.png");
+    personagem.imagem_baixo[0] = al_load_bitmap("img/caveman/caveman04.png");
+    personagem.imagem_baixo[1] = al_load_bitmap("img/caveman/caveman05.png");
+    personagem.imagem_baixo[2] = al_load_bitmap("img/caveman/caveman04.png");
+    personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman03.png");
     if (!personagem.imagem_baixo[0] || !personagem.imagem_baixo[1] || !personagem.imagem_baixo[2] || !personagem.imagem_baixo[3])
     {
-        printf("erro ao carregar imagem");
+        printf("erro ao carregar imagens personagem baixo");
         return false;
     }
 
-    personagem.imagem_esquerda[0] = al_load_bitmap("testes/Sprite teste/personagem_05.png");
-    personagem.imagem_esquerda[1] = al_load_bitmap("testes/Sprite teste/personagem_06.png");
-    personagem.imagem_esquerda[2] = al_load_bitmap("testes/Sprite teste/personagem_07.png");
-    personagem.imagem_esquerda[3] = al_load_bitmap("testes/Sprite teste/personagem_08.png");
+    personagem.imagem_esquerda[0] = al_load_bitmap("img/caveman/caveman03.png");
+    personagem.imagem_esquerda[1] = al_load_bitmap("img/caveman/caveman02.png");
+    personagem.imagem_esquerda[2] = al_load_bitmap("img/caveman/caveman03.png");
+    personagem.imagem_esquerda[3] = al_load_bitmap("img/caveman/caveman02.png");
     if (!personagem.imagem_esquerda[0] || !personagem.imagem_esquerda[1] || !personagem.imagem_esquerda[2] || !personagem.imagem_esquerda[3])
     {
-        printf("erro ao carregar imagem");
+        printf("erro ao carregar imagem personagem esquerda");
         return false;
     }
 
-    personagem.imagem_direita[0] = al_load_bitmap("testes/Sprite teste/personagem_09.png");
-    personagem.imagem_direita[1] = al_load_bitmap("testes/Sprite teste/personagem_10.png");
-    personagem.imagem_direita[2] = al_load_bitmap("testes/Sprite teste/personagem_11.png");
-    personagem.imagem_direita[3] = al_load_bitmap("testes/Sprite teste/personagem_12.png");
+    personagem.imagem_direita[0] = al_load_bitmap("img/caveman/caveman00.png");
+    personagem.imagem_direita[1] = al_load_bitmap("img/caveman/caveman01.png");
+    personagem.imagem_direita[2] = al_load_bitmap("img/caveman/caveman00.png");
+    personagem.imagem_direita[3] = al_load_bitmap("img/caveman/caveman01.png");
     if (!personagem.imagem_direita[0] || !personagem.imagem_direita[1] || !personagem.imagem_direita[2] || !personagem.imagem_direita[3])
     {
-        printf("erro ao carregar imagem");
+        printf("erro ao carregar imagem personagem direita");
         return false;
     }
 
-    personagem.imagem_cima[0] = al_load_bitmap("testes/Sprite teste/personagem_13.png");
-    personagem.imagem_cima[1] = al_load_bitmap("testes/Sprite teste/personagem_14.png");
-    personagem.imagem_cima[2] = al_load_bitmap("testes/Sprite teste/personagem_15.png");
-    personagem.imagem_cima[3] = al_load_bitmap("testes/Sprite teste/personagem_16.png");
+    personagem.imagem_cima[0] = al_load_bitmap("img/caveman/caveman07.png");
+    personagem.imagem_cima[1] = al_load_bitmap("img/caveman/caveman08.png");
+    personagem.imagem_cima[2] = al_load_bitmap("img/caveman/caveman07.png");
+    personagem.imagem_cima[3] = al_load_bitmap("img/caveman/caveman09.png");
     if (!personagem.imagem_cima[0] || !personagem.imagem_cima[1] || !personagem.imagem_cima[2] || !personagem.imagem_cima[3])
     {
-        printf("erro ao carregar imagem");
+        printf("erro ao carregar imagem personagem cima");
         return false;
     }
 
@@ -373,6 +373,8 @@ void finalizar()
     al_destroy_bitmap(botao_sair.desativado);
     al_destroy_bitmap(background.tela1);
     al_destroy_bitmap(background.tela2);
+    al_destroy_bitmap(background_tela1.tela1);
+    al_destroy_bitmap(background_tela1.tela2);
     al_destroy_bitmap(personagem.imagem_cima[0]);
     al_destroy_bitmap(personagem.imagem_cima[1]);
     al_destroy_bitmap(personagem.imagem_cima[2]);

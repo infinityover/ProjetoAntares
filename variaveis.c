@@ -8,15 +8,15 @@ struct botao{
     ALLEGRO_BITMAP *desativado;
 } botao;
 
-//estrutura dos botões ativos e desativamos
+//estrutura das telas do jogo
 struct telas{
     ALLEGRO_BITMAP *tela1;
     ALLEGRO_BITMAP *tela2;
-    ALLEGRO_BITMAP *tela3;
 } telas;
 
 //estrutura de objetos das telas
 struct objeto{
+    int pontos;
     int pos_x;
     int pos_y;
     int frame_ativo;
@@ -43,7 +43,7 @@ int tecla_pressionada = 0;
 unsigned char r, g, b;
 
 struct botao botao_novo, botao_ajuda, botao_sair;
-struct telas background;
+struct telas background, background_tela1;
 struct objeto personagem;
 
 const int LARGURA_TELA = 737; //920
