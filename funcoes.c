@@ -207,8 +207,7 @@ bool inicializar()
 {
     // Inicializa o Allegro
     al_init();
-    if (!al_init())
-    {
+    if (!al_init()){
         fprintf(stderr, "Falha ao inicializar a Allegro.\n");
         return false;
     }
@@ -216,8 +215,7 @@ bool inicializar()
     // Metodo do addon de inicializacao de imagem
     al_init_image_addon();
     janela = al_create_display(LARGURA_TELA, ALTURA_TELA);
-    if (!janela)
-    {
+    if (!janela){
         fprintf(stderr, "Falha ao criar janela.\n");
         return false;
     }
@@ -226,41 +224,36 @@ bool inicializar()
     al_set_window_title(janela, "Aprendendo Pré-História");
 
     // Torna apto o uso de mouse na aplicação
-    if (!al_install_mouse())
-    {
+    if (!al_install_mouse()){
         fprintf(stderr, "Falha ao inicializar o mouse.\n");
         al_destroy_display(janela);
         return false;
     }
 
     // Atribui o cursor padrão do sistema na aplicação
-    if (!al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT))
-    {
+    if (!al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT)){
         fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
         al_destroy_display(janela);
         return false;
     }
 
     // Torna apto o uso do teclado na aplicação
-    if (!al_install_keyboard())
-    {
+    if (!al_install_keyboard()){
         fprintf(stderr, "Falha ao inicializar o teclado.\n");
         return false;
     }
 
     // Cria a fila de eventos na aplicação
     fila_eventos = al_create_event_queue();
-    if (!fila_eventos)
-    {
+    if (!fila_eventos){
         fprintf(stderr, "Falha ao inicializar a fila de eventos.\n");
         al_destroy_display(janela);
         return false;
     }
 
     // Cria o timer na aplicação
-    timer = al_create_timer(0.01);
-    if (!timer)
-    {
+    timer = al_create_timer(0.1);
+    if (!timer){
         fprintf(stderr, "Falha ao criar timer.\n");
         al_destroy_event_queue(fila_eventos);
         al_destroy_display(janela);
@@ -299,7 +292,7 @@ bool carregar_imagens()
     personagem.imagem_baixo[0] = al_load_bitmap("img/caveman/caveman04.png");
     personagem.imagem_baixo[1] = al_load_bitmap("img/caveman/caveman05.png");
     personagem.imagem_baixo[2] = al_load_bitmap("img/caveman/caveman04.png");
-    personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman03.png");
+    personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman06.png");
     if (!personagem.imagem_baixo[0] || !personagem.imagem_baixo[1] || !personagem.imagem_baixo[2] || !personagem.imagem_baixo[3])
     {
         printf("erro ao carregar imagens personagem baixo");
