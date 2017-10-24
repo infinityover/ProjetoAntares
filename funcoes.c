@@ -126,9 +126,11 @@ int tela_inicial(int loop)
 
 int fase_1(int retorno, int loop)
 {
-  //int frame_ativo = 0;
+    //int frame_ativo = 0;
+    bool entrou = false;
+
 	personagem.pos_x = 0, personagem.pos_y = 0;
-  personagem.orientacao = 'C';
+    personagem.orientacao = 'C';
 
 	if (retorno == 0)
     {
@@ -152,15 +154,24 @@ int fase_1(int retorno, int loop)
                     loop = 1;
                 }
 
-                if(evento.type == ALLEGRO_EVENT_KEY_UP){
-                    tecla_pressionada = 0;
+                if(evento.type == ALLEGRO_EVENT_KEY_UP)
+                {
+                    entrou = true;
                 }
 
-                if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1){
+                if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
+                {
+                    tecla_pressionada = 0;
+                    entrou = false;
+                }
+
+                if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
+                {
                  personagem = verifica_movimentacao(personagem);
                 }
 
                 if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+
                     tecla_pressionada = 1;
 
                     switch(evento.keyboard.keycode){
@@ -377,7 +388,8 @@ void finalizar()
     al_destroy_event_queue(fila_eventos);
 }
 
-struct objeto verifica_movimentacao(struct objeto personagem){
+struct objeto verifica_movimentacao(struct objeto personagem)
+{
     if (personagem.frame_ativo == 3){
         personagem.frame_ativo = 0;
     } else{
