@@ -129,11 +129,10 @@ int fase_1(int retorno, int loop)
     //int frame_ativo = 0;
     bool entrou = false;
 
-	personagem.pos_x = 90, personagem.pos_y = 10;
-    personagem.orientacao = 'C';
+	personagem.pos_x = 10, personagem.pos_y = 10;
+  personagem.orientacao = 'C';
 
-	if (retorno == 0)
-    {
+	if (retorno == 0){
         loop = 0;
 
         // aloca o background da 1ª fase
@@ -154,13 +153,11 @@ int fase_1(int retorno, int loop)
                     loop = 1;
                 }
 
-                if(evento.type == ALLEGRO_EVENT_KEY_UP)
-                {
+                if(evento.type == ALLEGRO_EVENT_KEY_UP){
                     entrou = true;
                 }
 
-                if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
-                {
+                if (entrou == true && evento.type != ALLEGRO_EVENT_KEY_DOWN){
                     tecla_pressionada = 0;
                     entrou = false;
                 }
@@ -275,8 +272,8 @@ bool carregar_imagens()
 {
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
-    background_tela1.tela1 = al_load_bitmap("img/labirinto_ver.bmp");
-    background_tela1.tela2 = al_load_bitmap("img/labirinto_map.bmp");
+    background_tela1.tela1 = al_load_bitmap("img/labirinto_ver.jpg");
+    background_tela1.tela2 = al_load_bitmap("img/labirinto_map.png");
 
     // Alocamos o botão para ajuda
     botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
@@ -291,40 +288,40 @@ bool carregar_imagens()
     botao_sair.ativado = al_load_bitmap("img/BT_Sair_Ativado.png");
 
     // Alocamos os sprites do personagem
-    personagem.imagem_baixo[0] = al_load_bitmap("img/caveman/caveman04.png");
-    personagem.imagem_baixo[1] = al_load_bitmap("img/caveman/caveman05.png");
-    personagem.imagem_baixo[2] = al_load_bitmap("img/caveman/caveman04.png");
-    personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman06.png");
+    personagem.imagem_baixo[0] = al_load_bitmap("img/caveman/caveman02.png");
+    personagem.imagem_baixo[1] = al_load_bitmap("img/caveman/caveman01.png");
+    personagem.imagem_baixo[2] = al_load_bitmap("img/caveman/caveman02.png");
+    personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman03.png");
     if (!personagem.imagem_baixo[0] || !personagem.imagem_baixo[1] || !personagem.imagem_baixo[2] || !personagem.imagem_baixo[3])
     {
         printf("erro ao carregar imagens personagem baixo");
         return false;
     }
 
-    personagem.imagem_esquerda[0] = al_load_bitmap("img/caveman/caveman03.png");
-    personagem.imagem_esquerda[1] = al_load_bitmap("img/caveman/caveman02.png");
-    personagem.imagem_esquerda[2] = al_load_bitmap("img/caveman/caveman03.png");
-    personagem.imagem_esquerda[3] = al_load_bitmap("img/caveman/caveman02.png");
+    personagem.imagem_esquerda[0] = al_load_bitmap("img/caveman/caveman05.png");
+    personagem.imagem_esquerda[1] = al_load_bitmap("img/caveman/caveman04.png");
+    personagem.imagem_esquerda[2] = al_load_bitmap("img/caveman/caveman06.png");
+    personagem.imagem_esquerda[3] = al_load_bitmap("img/caveman/caveman04.png");
     if (!personagem.imagem_esquerda[0] || !personagem.imagem_esquerda[1] || !personagem.imagem_esquerda[2] || !personagem.imagem_esquerda[3])
     {
         printf("erro ao carregar imagem personagem esquerda");
         return false;
     }
 
-    personagem.imagem_direita[0] = al_load_bitmap("img/caveman/caveman00.png");
-    personagem.imagem_direita[1] = al_load_bitmap("img/caveman/caveman01.png");
-    personagem.imagem_direita[2] = al_load_bitmap("img/caveman/caveman00.png");
-    personagem.imagem_direita[3] = al_load_bitmap("img/caveman/caveman01.png");
+    personagem.imagem_direita[0] = al_load_bitmap("img/caveman/caveman08.png");
+    personagem.imagem_direita[1] = al_load_bitmap("img/caveman/caveman07.png");
+    personagem.imagem_direita[2] = al_load_bitmap("img/caveman/caveman08.png");
+    personagem.imagem_direita[3] = al_load_bitmap("img/caveman/caveman09.png");
     if (!personagem.imagem_direita[0] || !personagem.imagem_direita[1] || !personagem.imagem_direita[2] || !personagem.imagem_direita[3])
     {
         printf("erro ao carregar imagem personagem direita");
         return false;
     }
 
-    personagem.imagem_cima[0] = al_load_bitmap("img/caveman/caveman07.png");
-    personagem.imagem_cima[1] = al_load_bitmap("img/caveman/caveman08.png");
-    personagem.imagem_cima[2] = al_load_bitmap("img/caveman/caveman07.png");
-    personagem.imagem_cima[3] = al_load_bitmap("img/caveman/caveman09.png");
+    personagem.imagem_cima[0] = al_load_bitmap("img/caveman/caveman11.png");
+    personagem.imagem_cima[1] = al_load_bitmap("img/caveman/caveman12.png");
+    personagem.imagem_cima[2] = al_load_bitmap("img/caveman/caveman10.png");
+    personagem.imagem_cima[3] = al_load_bitmap("img/caveman/caveman11.png");
     if (!personagem.imagem_cima[0] || !personagem.imagem_cima[1] || !personagem.imagem_cima[2] || !personagem.imagem_cima[3])
     {
         printf("erro ao carregar imagem personagem cima");
@@ -393,25 +390,24 @@ void finalizar()
 
 struct objeto verifica_movimentacao(struct objeto personagem)
 {
+  for(int i = 0; i < 32; i++){
     switch (personagem.orientacao) {
       case 'D':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x +64 + 10, personagem.pos_y+64);
-        break;
-      case 'E':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x+64 - 10, personagem.pos_y+64);
-        break;
-      case 'C':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x+64, personagem.pos_y+64 - 10);
+        cor = al_get_pixel(background_exibir2, personagem.pos_x + i, personagem.pos_y);
         break;
       case 'B':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x+64, personagem.pos_y+64 + 10);
+        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + i);
         break;
     }
-
+    if (personagem.orientacao == 'C' || personagem.orientacao == 'E'){
+      cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y);
+    }
     al_unmap_rgb(cor, &r, &g, &b);
     if (r == 255 && g == 0 && b == 255){
       return personagem;
     }
+
+  }
 
     switch (personagem.orientacao) {
       case 'D':
