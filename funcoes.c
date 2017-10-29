@@ -129,7 +129,7 @@ int fase_1(int retorno, int loop)
     //int frame_ativo = 0;
     bool entrou = false;
 
-	personagem.pos_x = 0, personagem.pos_y = 0;
+	personagem.pos_x = 90, personagem.pos_y = 10;
     personagem.orientacao = 'C';
 
 	if (retorno == 0)
@@ -205,6 +205,9 @@ int fase_1(int retorno, int loop)
 bool inicializar()
 {
     // Inicializa o Allegro
+    //personagem.pos_x = 50;
+    //personagem.pos_y = 50;
+
     al_init();
     if (!al_init()){
         fprintf(stderr, "Falha ao inicializar a Allegro.\n");
@@ -273,7 +276,7 @@ bool carregar_imagens()
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
     background_tela1.tela1 = al_load_bitmap("img/labirinto_ver.jpg");
-    background_tela1.tela2 = al_load_bitmap("img/labirinto_map.png");
+    background_tela1.tela2 = al_load_bitmap("img/labirinto_map.jpg");
 
     // Alocamos o botão para ajuda
     botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
@@ -390,48 +393,50 @@ void finalizar()
 
 struct objeto verifica_movimentacao(struct objeto personagem)
 {
+    switch (personagem.orientacao) {
+      case 'D':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x +64 + 10, personagem.pos_y+64);
+        break;
+      case 'E':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x+64 - 10, personagem.pos_y+64);
+        break;
+      case 'C':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x+64, personagem.pos_y+64 - 10);
+        break;
+      case 'B':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x+64, personagem.pos_y+64 + 10);
+        break;
+    }
+
+    al_unmap_rgb(cor, &r, &g, &b);
+    if (r == 255 && g == 0 && b == 255){
+      return personagem;
+    }
+
+    switch (personagem.orientacao) {
+      case 'D':
+        personagem.pos_x = personagem.pos_x + 10;
+        personagem.imagem_ativa = personagem.imagem_direita[personagem.frame_ativo];
+        break;
+      case 'E':
+        personagem.pos_x = personagem.pos_x - 10;
+        personagem.imagem_ativa = personagem.imagem_esquerda[personagem.frame_ativo];
+        break;
+      case 'C':
+        personagem.pos_y = personagem.pos_y - 10;
+        personagem.imagem_ativa = personagem.imagem_cima[personagem.frame_ativo];
+        break;
+      case 'B':
+        personagem.pos_y = personagem.pos_y + 10;
+        personagem.imagem_ativa = personagem.imagem_baixo[personagem.frame_ativo];
+        break;
+    }
+
     if (personagem.frame_ativo == 3){
         personagem.frame_ativo = 0;
     } else{
         personagem.frame_ativo++;
     }
-    switch (personagem.orientacao) {
-      case 'D':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x + 10, personagem.pos_y);
-        al_unmap_rgb(cor, &r, &g, &b);
 
-        if (r != 255 && g != 0 && b != 255){
-            personagem.pos_x = personagem.pos_x + 10;
-            personagem.imagem_ativa = personagem.imagem_direita[personagem.frame_ativo];
-        }
-      break;
-      case 'E':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x - 10, personagem.pos_y);
-        al_unmap_rgb(cor, &r, &g, &b);
-
-        if (r != 255 && g != 0 && b != 255){
-            personagem.pos_x = personagem.pos_x - 10;
-            personagem.imagem_ativa = personagem.imagem_esquerda[personagem.frame_ativo];
-        }
-        break;
-      case 'C':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y - 10);
-        al_unmap_rgb(cor, &r, &g, &b);
-
-        if (r != 255 && g != 0 && b != 255){
-            personagem.pos_y = personagem.pos_y - 10;
-            personagem.imagem_ativa = personagem.imagem_cima[personagem.frame_ativo];
-        }
-        break;
-      case 'B':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + 10);
-        al_unmap_rgb(cor, &r, &g, &b);
-
-        if (r != 255 && g != 0 && b != 255){
-            personagem.pos_y = personagem.pos_y + 10;
-            personagem.imagem_ativa = personagem.imagem_baixo[personagem.frame_ativo];
-        }
-        break;
-    }
     return personagem;
 }
