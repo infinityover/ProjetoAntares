@@ -403,7 +403,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
       cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y);
     }
     al_unmap_rgb(cor, &r, &g, &b);
-    if (r == 255 && g == 0 && b == 255){
+    if (r >= 252 && g =< 3 && b >= 252){
       return personagem;
     }
 
