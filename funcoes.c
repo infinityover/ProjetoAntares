@@ -275,8 +275,8 @@ bool carregar_imagens()
 {
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
-    background_tela1.tela1 = al_load_bitmap("img/labirinto_ver.jpg");
-    background_tela1.tela2 = al_load_bitmap("img/labirinto_map.jpg");
+    background_tela1.tela1 = al_load_bitmap("img/labirinto_ver.bmp");
+    background_tela1.tela2 = al_load_bitmap("img/labirinto_map.bmp");
 
     // Alocamos o botão para ajuda
     botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
