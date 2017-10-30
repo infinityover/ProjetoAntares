@@ -164,12 +164,11 @@ int fase_1(int retorno, int loop)
 
                 if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
                 {
-                 personagem = verifica_movimentacao(personagem);
+                  personagem = verifica_movimentacao(personagem);
                 }
 
                 if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
 
-                    tecla_pressionada = 1;
 
                     switch(evento.keyboard.keycode){
                         case ALLEGRO_KEY_UP:
@@ -184,7 +183,10 @@ int fase_1(int retorno, int loop)
                         case ALLEGRO_KEY_RIGHT:
                           personagem.orientacao = 'D';
                           break;
+                        default:
+                          continue;
                     }
+                    tecla_pressionada = 1;
                 }
             }
 
@@ -251,7 +253,7 @@ bool inicializar()
     }
 
     // Cria o timer na aplicação
-    timer = al_create_timer(0.1);
+    timer = al_create_timer(0.05);
     if (!timer){
         fprintf(stderr, "Falha ao criar timer.\n");
         al_destroy_event_queue(fila_eventos);
@@ -390,7 +392,26 @@ void finalizar()
 
 struct objeto verifica_movimentacao(struct objeto personagem)
 {
-  for(int i = 0; i < 32; i++){
+
+  if (personagem.orientacao == 'C' || personagem.orientacao == 'E'){
+    for(int i = 0; i < 10; i++){
+      switch (personagem.orientacao) {
+        case 'C':
+          cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y - i);
+          break;
+        case 'E':
+            cor = al_get_pixel(background_exibir2, personagem.pos_x- i, personagem.pos_y);
+            break;
+      }
+      cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y);
+      al_unmap_rgb(cor, &r, &g, &b);
+
+      if (r >= 245 && g <= 10 && b >= 245){
+        return personagem;
+      }
+    }
+  }else{
+  for(int i = 10; i < 42; i++){
     switch (personagem.orientacao) {
       case 'D':
         cor = al_get_pixel(background_exibir2, personagem.pos_x + i, personagem.pos_y);
@@ -399,13 +420,12 @@ struct objeto verifica_movimentacao(struct objeto personagem)
         cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + i);
         break;
     }
-    if (personagem.orientacao == 'C' || personagem.orientacao == 'E'){
-      cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y);
-    }
     al_unmap_rgb(cor, &r, &g, &b);
-    if (r >= 252 && g =< 3 && b >= 252){
+
+    if (r >= 245 && g <= 10 && b >= 245){
       return personagem;
     }
+  }
 
   }
 
