@@ -129,7 +129,7 @@ int fase_1(int retorno, int loop)
     //int frame_ativo = 0;
     bool entrou = false;
 
-	personagem.pos_x = 10, personagem.pos_y = 10;
+	personagem.pos_x = 120, personagem.pos_y = 500;
   personagem.orientacao = 'C';
 
 	if (retorno == 0){
@@ -222,7 +222,7 @@ bool inicializar()
     }
 
     // Configura o título da janela
-    al_set_window_title(janela, "Aprendendo Pré-História");
+    al_set_window_title(janela, "Antares");
 
     // Torna apto o uso de mouse na aplicação
     if (!al_install_mouse()){
