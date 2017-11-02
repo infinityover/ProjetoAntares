@@ -394,6 +394,12 @@ struct objeto verifica_movimentacao(struct objeto personagem)
 {
 
   if (personagem.orientacao == 'C' || personagem.orientacao == 'E'){
+    if((personagem.pos_y - 10) < 0 && personagem.orientacao == 'C'){
+      return personagem;
+    }
+    if((personagem.pos_x - 10) < 0 && personagem.orientacao == 'E'){
+      return personagem;
+    }
     for(int i = 0; i < 10; i++){
       switch (personagem.orientacao) {
         case 'C':
@@ -411,9 +417,16 @@ struct objeto verifica_movimentacao(struct objeto personagem)
       }
     }
   }else{
+  if (personagem.pos_x + 10 > (LARGURA_TELA - TAMANHO_PERSONAGEM_X) && personagem.orientacao == 'D'){
+    return personagem;
+  }
+  if (personagem.pos_y + 10 > (ALTURA_TELA - TAMANHO_PERSONAGEM_Y) && personagem.orientacao == 'B'){
+    return personagem;
+  }
   for(int i = 10; i < 42; i++){
     switch (personagem.orientacao) {
       case 'D':
+
         cor = al_get_pixel(background_exibir2, personagem.pos_x + i, personagem.pos_y);
         break;
       case 'B':

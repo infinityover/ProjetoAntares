@@ -16,7 +16,6 @@ struct telas{
 
 //estrutura de objetos das telas
 struct objeto{
-    int pontos;
     int pos_x;
     int pos_y;
     int frame_ativo;
@@ -48,3 +47,7 @@ struct objeto personagem;
 
 const int LARGURA_TELA = 800;
 const int ALTURA_TELA = 612;
+
+
+const int TAMANHO_PERSONAGEM_X = 32;
+const int TAMANHO_PERSONAGEM_Y = 48;
