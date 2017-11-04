@@ -46,8 +46,8 @@ struct telas background, background_tela1;
 struct objeto personagem;
 
 const int LARGURA_TELA = 800;
-const int ALTURA_TELA = 612;
+const int ALTURA_TELA = 480;
 
 
-const int TAMANHO_PERSONAGEM_X = 32;
-const int TAMANHO_PERSONAGEM_Y = 48;
+const int TAMANHO_PERSONAGEM_X = 40;
+const int TAMANHO_PERSONAGEM_Y = 40;
