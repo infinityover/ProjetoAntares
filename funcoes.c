@@ -412,7 +412,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
       cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y);
       al_unmap_rgb(cor, &r, &g, &b);
 
-      if (r >= 245 && g <= 10 && b >= 245){
+      if (r >= 245 && g >= 245 && b >= 245){
         return personagem;
       }
     }
@@ -435,7 +435,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
     }
     al_unmap_rgb(cor, &r, &g, &b);
 
-    if (r >= 245 && g <= 10 && b >= 245){
+    if (r >= 245 && g >= 245 && b >= 245){
       return personagem;
     }
   }
