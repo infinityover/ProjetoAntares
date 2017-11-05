@@ -251,7 +251,7 @@ bool inicializar()
     }
 
     // Cria o timer na aplicação
-    timer = al_create_timer(0.05);
+    timer = al_create_timer(0.01);
     if (!timer){
         fprintf(stderr, "Falha ao criar timer.\n");
         al_destroy_event_queue(fila_eventos);
@@ -397,19 +397,19 @@ struct objeto verifica_movimentacao(struct objeto personagem)
     }
     switch (personagem.orientacao) {
       case 'D':
-            personagem.pos_x = personagem.pos_x + 7;
+            personagem.pos_x = personagem.pos_x + 1;
             personagem.imagem_ativa = personagem.imagem_direita[personagem.frame_ativo];
       break;
       case 'E':
-            personagem.pos_x = personagem.pos_x - 7;
+            personagem.pos_x = personagem.pos_x - 1;
             personagem.imagem_ativa = personagem.imagem_esquerda[personagem.frame_ativo];
         break;
       case 'C':
-            personagem.pos_y = personagem.pos_y - 7;
+            personagem.pos_y = personagem.pos_y - 1;
             personagem.imagem_ativa = personagem.imagem_cima[personagem.frame_ativo];
         break;
       case 'B':
-            personagem.pos_y = personagem.pos_y + 7;
+            personagem.pos_y = personagem.pos_y + 1;
             personagem.imagem_ativa = personagem.imagem_baixo[personagem.frame_ativo];
         break;
     }
