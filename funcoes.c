@@ -129,7 +129,7 @@ int fase_1(int retorno, int loop)
     //int frame_ativo = 0;
     bool entrou = false;
 
-	personagem.pos_x = 0, personagem.pos_y = 0;
+	personagem.pos_x = 106, personagem.pos_y = 497;
     personagem.orientacao = 'C';
 
 	if (retorno == 0)
