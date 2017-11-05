@@ -251,7 +251,7 @@ bool inicializar()
     }
 
     // Cria o timer na aplicação
-    timer = al_create_timer(0.1);
+    timer = al_create_timer(0.05);
     if (!timer){
         fprintf(stderr, "Falha ao criar timer.\n");
         al_destroy_event_queue(fila_eventos);
