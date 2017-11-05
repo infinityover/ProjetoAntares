@@ -202,6 +202,7 @@ int fase_1(int retorno, int loop)
     return 0;
 }
 
+//teste
 bool inicializar()
 {
     // Inicializa o Allegro
