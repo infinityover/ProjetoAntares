@@ -16,6 +16,7 @@ struct telas{
 
 //estrutura de objetos das telas
 struct objeto{
+    int pontos;
     int pos_x;
     int pos_y;
     int frame_ativo;
@@ -45,9 +46,5 @@ struct botao botao_novo, botao_ajuda, botao_sair;
 struct telas background, background_tela1;
 struct objeto personagem;
 
-const int LARGURA_TELA = 800;
-const int ALTURA_TELA = 480;
-
-
-const int TAMANHO_PERSONAGEM_X = 40;
-const int TAMANHO_PERSONAGEM_Y = 40;
+const int LARGURA_TELA = 1000;
+const int ALTURA_TELA = 600;

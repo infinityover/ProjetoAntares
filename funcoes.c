@@ -104,17 +104,17 @@ int tela_inicial(int loop)
         }
 
         //Desenha BT_Novo_Jogo
-        //al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
+        al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_novo_exibir, LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) -220, 0);
 
         //Desenha BT_Ajuda
-        //al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
+        al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_ajuda_exibir, LARGURA_TELA - al_get_bitmap_width(botao_ajuda_exibir) - 80,
         ALTURA_TELA - al_get_bitmap_height(botao_ajuda_exibir) - 140, 0);
 
         //Desenha BT_Sair
-        //al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
+        al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_sair_exibir, LARGURA_TELA - al_get_bitmap_width(botao_sair_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 60, 0);
 
@@ -129,10 +129,11 @@ int fase_1(int retorno, int loop)
     //int frame_ativo = 0;
     bool entrou = false;
 
-	personagem.pos_x = 80, personagem.pos_y = 403;
-  personagem.orientacao = 'C';
+	personagem.pos_x = 106, personagem.pos_y = 497;
+    personagem.orientacao = 'C';
 
-	if (retorno == 0){
+	if (retorno == 0)
+    {
         loop = 0;
 
         // aloca o background da 1ª fase
@@ -153,22 +154,25 @@ int fase_1(int retorno, int loop)
                     loop = 1;
                 }
 
-                if(evento.type == ALLEGRO_EVENT_KEY_UP){
+                if(evento.type == ALLEGRO_EVENT_KEY_UP)
+                {
                     entrou = true;
                 }
 
-                if (entrou == true && evento.type != ALLEGRO_EVENT_KEY_DOWN){
+                if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
+                {
                     tecla_pressionada = 0;
                     entrou = false;
                 }
 
                 if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
                 {
-                  personagem = verifica_movimentacao(personagem);
+                 personagem = verifica_movimentacao(personagem);
                 }
 
                 if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
 
+                    tecla_pressionada = 1;
 
                     switch(evento.keyboard.keycode){
                         case ALLEGRO_KEY_UP:
@@ -183,10 +187,7 @@ int fase_1(int retorno, int loop)
                         case ALLEGRO_KEY_RIGHT:
                           personagem.orientacao = 'D';
                           break;
-                        default:
-                          continue;
                     }
-                    tecla_pressionada = 1;
                 }
             }
 
@@ -204,9 +205,6 @@ int fase_1(int retorno, int loop)
 bool inicializar()
 {
     // Inicializa o Allegro
-    //personagem.pos_x = 50;
-    //personagem.pos_y = 50;
-
     al_init();
     if (!al_init()){
         fprintf(stderr, "Falha ao inicializar a Allegro.\n");
@@ -253,7 +251,7 @@ bool inicializar()
     }
 
     // Cria o timer na aplicação
-    timer = al_create_timer(0.05);
+    timer = al_create_timer(0.01);
     if (!timer){
         fprintf(stderr, "Falha ao criar timer.\n");
         al_destroy_event_queue(fila_eventos);
@@ -275,7 +273,7 @@ bool carregar_imagens()
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
     background_tela1.tela1 = al_load_bitmap("img/tela2-mapa.bmp");
-    background_tela1.tela2 = al_load_bitmap("img/tela2-mapa-under.bmp");
+    background_tela1.tela2 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
 
     // Alocamos o botão para ajuda
     botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
@@ -290,47 +288,47 @@ bool carregar_imagens()
     botao_sair.ativado = al_load_bitmap("img/BT_Sair_Ativado.png");
 
     // Alocamos os sprites do personagem
-    personagem.imagem_baixo[0] = al_load_bitmap("img/caveman/caveman01.png");
-    personagem.imagem_baixo[1] = al_load_bitmap("img/caveman/caveman02.png");
-    personagem.imagem_baixo[2] = al_load_bitmap("img/caveman/caveman03.png");
-    //personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman03.png");
-    if (!personagem.imagem_baixo[0] || !personagem.imagem_baixo[1] || !personagem.imagem_baixo[2])
+    personagem.imagem_baixo[0] = al_load_bitmap("img/caveman/caveman02.png");
+    personagem.imagem_baixo[1] = al_load_bitmap("img/caveman/caveman03.png");
+    personagem.imagem_baixo[2] = al_load_bitmap("img/caveman/caveman02.png");
+    personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman01.png");
+    if (!personagem.imagem_baixo[0] || !personagem.imagem_baixo[1] || !personagem.imagem_baixo[2] || !personagem.imagem_baixo[3])
     {
         printf("erro ao carregar imagens personagem baixo");
         return false;
     }
 
-    personagem.imagem_esquerda[0] = al_load_bitmap("img/caveman/caveman04.png");
-    personagem.imagem_esquerda[1] = al_load_bitmap("img/caveman/caveman05.png");
+    personagem.imagem_esquerda[0] = al_load_bitmap("img/caveman/caveman05.png");
+    personagem.imagem_esquerda[1] = al_load_bitmap("img/caveman/caveman04.png");
     personagem.imagem_esquerda[2] = al_load_bitmap("img/caveman/caveman06.png");
-    //personagem.imagem_esquerda[3] = al_load_bitmap("img/caveman/caveman04.png");
-    if (!personagem.imagem_esquerda[0] || !personagem.imagem_esquerda[1] || !personagem.imagem_esquerda[2])
+    personagem.imagem_esquerda[3] = al_load_bitmap("img/caveman/caveman05.png");
+    if (!personagem.imagem_esquerda[0] || !personagem.imagem_esquerda[1] || !personagem.imagem_esquerda[2] || !personagem.imagem_esquerda[3])
     {
         printf("erro ao carregar imagem personagem esquerda");
         return false;
     }
 
-    personagem.imagem_direita[0] = al_load_bitmap("img/caveman/caveman07.png");
-    personagem.imagem_direita[1] = al_load_bitmap("img/caveman/caveman08.png");
-    personagem.imagem_direita[2] = al_load_bitmap("img/caveman/caveman09.png");
-    //personagem.imagem_direita[3] = al_load_bitmap("img/caveman/caveman09.png");
-    if (!personagem.imagem_direita[0] || !personagem.imagem_direita[1] || !personagem.imagem_direita[2])
+    personagem.imagem_direita[0] = al_load_bitmap("img/caveman/caveman08.png");
+    personagem.imagem_direita[1] = al_load_bitmap("img/caveman/caveman09.png");
+    personagem.imagem_direita[2] = al_load_bitmap("img/caveman/caveman07.png");
+    personagem.imagem_direita[3] = al_load_bitmap("img/caveman/caveman08.png");
+    if (!personagem.imagem_direita[0] || !personagem.imagem_direita[1] || !personagem.imagem_direita[2] || !personagem.imagem_direita[3])
     {
         printf("erro ao carregar imagem personagem direita");
         return false;
     }
 
-    personagem.imagem_cima[0] = al_load_bitmap("img/caveman/caveman10.png");
-    personagem.imagem_cima[1] = al_load_bitmap("img/caveman/caveman11.png");
-    personagem.imagem_cima[2] = al_load_bitmap("img/caveman/caveman12.png");
-    //personagem.imagem_cima[3] = al_load_bitmap("img/caveman/caveman11.png");
-    if (!personagem.imagem_cima[0] || !personagem.imagem_cima[1] || !personagem.imagem_cima[2])
+    personagem.imagem_cima[0] = al_load_bitmap("img/caveman/caveman11.png");
+    personagem.imagem_cima[1] = al_load_bitmap("img/caveman/caveman12.png");
+    personagem.imagem_cima[2] = al_load_bitmap("img/caveman/caveman10.png");
+    personagem.imagem_cima[3] = al_load_bitmap("img/caveman/caveman11.png");
+    if (!personagem.imagem_cima[0] || !personagem.imagem_cima[1] || !personagem.imagem_cima[2] || !personagem.imagem_cima[3])
     {
         printf("erro ao carregar imagem personagem cima");
         return false;
     }
 
-    personagem.imagem_ativa = personagem.imagem_baixo[2];
+    personagem.imagem_ativa = personagem.imagem_cima[3];
 
     if (!botao_novo.desativado || !botao_novo.ativado)
     {
@@ -372,19 +370,19 @@ void finalizar()
     al_destroy_bitmap(personagem.imagem_cima[0]);
     al_destroy_bitmap(personagem.imagem_cima[1]);
     al_destroy_bitmap(personagem.imagem_cima[2]);
-    //al_destroy_bitmap(personagem.imagem_cima[3]);
+    al_destroy_bitmap(personagem.imagem_cima[3]);
     al_destroy_bitmap(personagem.imagem_baixo[0]);
     al_destroy_bitmap(personagem.imagem_baixo[1]);
     al_destroy_bitmap(personagem.imagem_baixo[2]);
-    //al_destroy_bitmap(personagem.imagem_baixo[3]);
+    al_destroy_bitmap(personagem.imagem_baixo[3]);
     al_destroy_bitmap(personagem.imagem_direita[0]);
     al_destroy_bitmap(personagem.imagem_direita[1]);
     al_destroy_bitmap(personagem.imagem_direita[2]);
-    //al_destroy_bitmap(personagem.imagem_direita[3]);
+    al_destroy_bitmap(personagem.imagem_direita[3]);
     al_destroy_bitmap(personagem.imagem_esquerda[0]);
     al_destroy_bitmap(personagem.imagem_esquerda[1]);
     al_destroy_bitmap(personagem.imagem_esquerda[2]);
-    //al_destroy_bitmap(personagem.imagem_esquerda[3]);
+    al_destroy_bitmap(personagem.imagem_esquerda[3]);
     al_destroy_timer(timer);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
@@ -392,80 +390,28 @@ void finalizar()
 
 struct objeto verifica_movimentacao(struct objeto personagem)
 {
-
-  if (personagem.orientacao == 'C' || personagem.orientacao == 'E'){
-    if((personagem.pos_y - 10) < 0 && personagem.orientacao == 'C'){
-      return personagem;
-    }
-    if((personagem.pos_x - 10) < 0 && personagem.orientacao == 'E'){
-      return personagem;
-    }
-    for(int i = 0; i < 10; i++){
-      switch (personagem.orientacao) {
-        case 'C':
-          cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y - i);
-          break;
-        case 'E':
-            cor = al_get_pixel(background_exibir2, personagem.pos_x- i, personagem.pos_y);
-            break;
-      }
-      cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y);
-      al_unmap_rgb(cor, &r, &g, &b);
-
-      if (r >= 245 && g >= 245 && b >= 245){
-        return personagem;
-      }
-    }
-  }else{
-  if (personagem.pos_x + 10 > (LARGURA_TELA - TAMANHO_PERSONAGEM_X) && personagem.orientacao == 'D'){
-    return personagem;
-  }
-  if (personagem.pos_y + 10 > (ALTURA_TELA - TAMANHO_PERSONAGEM_Y) && personagem.orientacao == 'B'){
-    return personagem;
-  }
-  for(int i = 10; i < 42; i++){
-    switch (personagem.orientacao) {
-      case 'D':
-
-        cor = al_get_pixel(background_exibir2, personagem.pos_x + i, personagem.pos_y);
-        break;
-      case 'B':
-        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + i);
-        break;
-    }
-    al_unmap_rgb(cor, &r, &g, &b);
-
-    if (r >= 245 && g >= 245 && b >= 245){
-      return personagem;
-    }
-  }
-
-  }
-
-    switch (personagem.orientacao) {
-      case 'D':
-        personagem.pos_x = personagem.pos_x + 10;
-        personagem.imagem_ativa = personagem.imagem_direita[personagem.frame_ativo];
-        break;
-      case 'E':
-        personagem.pos_x = personagem.pos_x - 10;
-        personagem.imagem_ativa = personagem.imagem_esquerda[personagem.frame_ativo];
-        break;
-      case 'C':
-        personagem.pos_y = personagem.pos_y - 10;
-        personagem.imagem_ativa = personagem.imagem_cima[personagem.frame_ativo];
-        break;
-      case 'B':
-        personagem.pos_y = personagem.pos_y + 10;
-        personagem.imagem_ativa = personagem.imagem_baixo[personagem.frame_ativo];
-        break;
-    }
-
-    if (personagem.frame_ativo == 2){
+    if (personagem.frame_ativo == 3){
         personagem.frame_ativo = 0;
     } else{
         personagem.frame_ativo++;
     }
-
+    switch (personagem.orientacao) {
+      case 'D':
+            personagem.pos_x = personagem.pos_x + 1;
+            personagem.imagem_ativa = personagem.imagem_direita[personagem.frame_ativo];
+      break;
+      case 'E':
+            personagem.pos_x = personagem.pos_x - 1;
+            personagem.imagem_ativa = personagem.imagem_esquerda[personagem.frame_ativo];
+        break;
+      case 'C':
+            personagem.pos_y = personagem.pos_y - 1;
+            personagem.imagem_ativa = personagem.imagem_cima[personagem.frame_ativo];
+        break;
+      case 'B':
+            personagem.pos_y = personagem.pos_y + 1;
+            personagem.imagem_ativa = personagem.imagem_baixo[personagem.frame_ativo];
+        break;
+    }
     return personagem;
 }
