@@ -397,20 +397,40 @@ struct objeto verifica_movimentacao(struct objeto personagem)
     }
     switch (personagem.orientacao) {
       case 'D':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x + 1, personagem.pos_y);
+        al_unmap_rgb(cor, &r, &g, &b);
+
+        if (r > 0 && g > 0 && b > 0){
             personagem.pos_x = personagem.pos_x + 1;
             personagem.imagem_ativa = personagem.imagem_direita[personagem.frame_ativo];
+        }
       break;
       case 'E':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x - 1, personagem.pos_y);
+        al_unmap_rgb(cor, &r, &g, &b);
+
+        if (r >= 240 && g >= 240 && b >= 240){
             personagem.pos_x = personagem.pos_x - 1;
             personagem.imagem_ativa = personagem.imagem_esquerda[personagem.frame_ativo];
+        }
         break;
       case 'C':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y - 1);
+        al_unmap_rgb(cor, &r, &g, &b);
+
+        if (r >= 240 && g >= 240 && b >= 240){
             personagem.pos_y = personagem.pos_y - 1;
             personagem.imagem_ativa = personagem.imagem_cima[personagem.frame_ativo];
+        }
         break;
       case 'B':
+        cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + 1);
+        al_unmap_rgb(cor, &r, &g, &b);
+
+        if (r >= 240 && g >= 240 && b >= 240){
             personagem.pos_y = personagem.pos_y + 1;
             personagem.imagem_ativa = personagem.imagem_baixo[personagem.frame_ativo];
+        }
         break;
     }
     return personagem;
