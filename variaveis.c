@@ -46,5 +46,5 @@ struct botao botao_novo, botao_ajuda, botao_sair;
 struct telas background, background_tela1;
 struct objeto personagem;
 
-const int LARGURA_TELA = 800;
-const int ALTURA_TELA = 480;
+const int LARGURA_TELA = 1000;
+const int ALTURA_TELA = 600;
