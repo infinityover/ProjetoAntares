@@ -3,19 +3,19 @@
 //=====================================================================================================
 
 //estrutura dos botões da tela inicial
-struct botao{
+typedef struct botao{
     ALLEGRO_BITMAP *ativado;
     ALLEGRO_BITMAP *desativado;
 } botao;
 
 //estrutura das telas do jogo
-struct telas{
+typedef struct telas{
     ALLEGRO_BITMAP *tela1;
     ALLEGRO_BITMAP *tela2;
 } telas;
 
 //estrutura de objetos das telas
-struct objeto{
+typedef struct objeto{
     int pontos;
     int pos_x;
     int pos_y;
@@ -42,9 +42,9 @@ ALLEGRO_COLOR cor;
 int tecla_pressionada = 0;
 unsigned char r, g, b;
 
-struct botao botao_novo, botao_ajuda, botao_sair;
-struct telas background, background_tela1;
-struct objeto personagem;
+botao botao_novo, botao_ajuda, botao_sair;
+telas background, background_tela1;
+objeto personagem;
 
 const int LARGURA_TELA = 1000;
 const int ALTURA_TELA = 600;

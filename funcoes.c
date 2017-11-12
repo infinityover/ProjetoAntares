@@ -69,9 +69,6 @@ int tela_inicial(int loop)
                 {
                     novo_jogo = 1;
                 }
-            } else
-            {
-                continue;
             }
         }
 
@@ -104,17 +101,17 @@ int tela_inicial(int loop)
         }
 
         //Desenha BT_Novo_Jogo
-        al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
+        //al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_novo_exibir, LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) -220, 0);
 
         //Desenha BT_Ajuda
-        al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
+        //al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_ajuda_exibir, LARGURA_TELA - al_get_bitmap_width(botao_ajuda_exibir) - 80,
         ALTURA_TELA - al_get_bitmap_height(botao_ajuda_exibir) - 140, 0);
 
         //Desenha BT_Sair
-        al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
+        //al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_sair_exibir, LARGURA_TELA - al_get_bitmap_width(botao_sair_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 60, 0);
 
@@ -172,19 +169,21 @@ int fase_1(int retorno, int loop)
 
                 if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
 
-                    tecla_pressionada = 1;
-
                     switch(evento.keyboard.keycode){
                         case ALLEGRO_KEY_UP:
+                          tecla_pressionada = 1;
                           personagem.orientacao = 'C';
                           break;
                         case ALLEGRO_KEY_DOWN:
+                          tecla_pressionada = 1;
                           personagem.orientacao = 'B';
                           break;
                         case ALLEGRO_KEY_LEFT:
+                          tecla_pressionada = 1;
                           personagem.orientacao = 'E';
                           break;
                         case ALLEGRO_KEY_RIGHT:
+                          tecla_pressionada = 1;
                           personagem.orientacao = 'D';
                           break;
                     }
@@ -205,7 +204,7 @@ int fase_1(int retorno, int loop)
 bool inicializar()
 {
     // Inicializa o Allegro
-    al_init();
+    //al_init();
     if (!al_init()){
         fprintf(stderr, "Falha ao inicializar a Allegro.\n");
         return false;
@@ -273,6 +272,7 @@ bool carregar_imagens()
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
     background_tela1.tela1 = al_load_bitmap("img/tela2-mapa.bmp");
+    //background_tela1.tela1 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
     background_tela1.tela2 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
 
     // Alocamos o botão para ajuda
@@ -447,3 +447,25 @@ struct objeto verifica_movimentacao(struct objeto personagem)
     }
     return personagem;
 }
+
+//void lancar(objeto *lanca, objeto *inimigo){
+//  if(verificar_impacto(&lanca, &inimigo)){
+//      kill(&inimigo);
+//  }
+//}
+//
+//void kill(objeto *inimigo){
+//  free(inimigo);
+//}
+//
+//
+//int verificar_impacto(objeto *object, objeto *verificar){
+////  int pos_xfim = verificar -> pos_x + al_get_bitmap_width(verificar -> imagem_ativa);
+////  int pos_yfim = verificar -> pos_y + al_get_bitmap_height(verificar -> imagem_ativa;
+////
+////  //if((objeto -> pos_y) >= )
+////  return 1;
+////
+////
+//  return 0;
+//}

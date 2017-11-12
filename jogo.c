@@ -33,6 +33,7 @@ int main(void){
     	finalizar();
     	return -1;
     }
+    //fase_2()
 
     finalizar();
     return 0;
