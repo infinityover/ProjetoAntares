@@ -121,84 +121,85 @@ int tela_inicial(int loop)
     return 0;
 }
 
-int fase_1(int retorno, int loop)
+int fase_1()
 {
-    //int frame_ativo = 0;
-    bool entrou = false;
+  //int frame_ativo = 0;
+  bool entrou = false;
 
 	personagem.pos_x = 106, personagem.pos_y = 497;
-    personagem.orientacao = 'C';
+  personagem.orientacao = 'C';
+  int loop = 0;
 
-	if (retorno == 0)
-    {
-        loop = 0;
+  // aloca o background da 1ª fase
+  background_exibir = background_tela1.tela1;
 
-        // aloca o background da 1ª fase
-        background_exibir = background_tela1.tela1;
+  // aloca o background da 1ª fase
+  background_exibir2 = background_tela1.tela2;
+  al_start_timer(timer);
+  while (!loop){
+      // Verificamos se há eventos na fila
+      while (!al_is_event_queue_empty(fila_eventos)){
+          al_wait_for_event(fila_eventos, &evento);
+          // Se o evento foi fechar o jogo
+          if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+              loop = 1;
+          }
+          if(evento.type == ALLEGRO_EVENT_KEY_UP)
+          {
+              entrou = true;
+          }
+          if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
+          {
+              tecla_pressionada = 0;
+              entrou = false;
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
+          {
+           personagem = verifica_movimentacao(personagem);
+          }
+          if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+              switch(evento.keyboard.keycode){
+                  case ALLEGRO_KEY_UP:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'C';
+                    break;
+                  case ALLEGRO_KEY_DOWN:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'B';
+                    break;
+                  case ALLEGRO_KEY_LEFT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'E';
+                    break;
+                  case ALLEGRO_KEY_RIGHT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'D';
+                    break;
+              }
+          }
+          //if(evento.type == ALLEGRO_EVENT_TIMER){
+          //  if(!verifica_fim(&background_exibir2)){
+          //    loop = 1;
+          //  }
+          //}
+      }
+      //Desenha background
+      al_draw_bitmap(background_exibir, 0,0,0);
+      //Desenha Personagem quando pressionado o botão novo jogo
+      al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
+      // Atualiza a tela
+      al_flip_display();
+  }
 
-        // aloca o background da 1ª fase
-        background_exibir2 = background_tela1.tela2;
+return 0;
+}
 
-        al_start_timer(timer);
+int fase_2(){
+  return 0;
+}
 
-        while (!loop){
-            // Verificamos se há eventos na fila
-            while (!al_is_event_queue_empty(fila_eventos)){
-                al_wait_for_event(fila_eventos, &evento);
-
-                // Se o evento foi fechar o jogo
-                if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-                    loop = 1;
-                }
-
-                if(evento.type == ALLEGRO_EVENT_KEY_UP)
-                {
-                    entrou = true;
-                }
-
-                if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
-                {
-                    tecla_pressionada = 0;
-                    entrou = false;
-                }
-
-                if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
-                {
-                 personagem = verifica_movimentacao(personagem);
-                }
-
-                if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
-
-                    switch(evento.keyboard.keycode){
-                        case ALLEGRO_KEY_UP:
-                          tecla_pressionada = 1;
-                          personagem.orientacao = 'C';
-                          break;
-                        case ALLEGRO_KEY_DOWN:
-                          tecla_pressionada = 1;
-                          personagem.orientacao = 'B';
-                          break;
-                        case ALLEGRO_KEY_LEFT:
-                          tecla_pressionada = 1;
-                          personagem.orientacao = 'E';
-                          break;
-                        case ALLEGRO_KEY_RIGHT:
-                          tecla_pressionada = 1;
-                          personagem.orientacao = 'D';
-                          break;
-                    }
-                }
-            }
-
-            //Desenha background
-            al_draw_bitmap(background_exibir, 0,0,0);
-            //Desenha Personagem quando pressionado o botão novo jogo
-            al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
-            // Atualiza a tela
-            al_flip_display();
-        }
-    }
-    return 0;
+int fase_3(){
+  return 0;
 }
 
 bool inicializar()
@@ -448,24 +449,34 @@ struct objeto verifica_movimentacao(struct objeto personagem)
     return personagem;
 }
 
-//void lancar(objeto *lanca, objeto *inimigo){
-//  if(verificar_impacto(&lanca, &inimigo)){
-//      kill(&inimigo);
-//  }
-//}
+void lancar(objeto *lanca, objeto *inimigo){
+  if(verificar_impacto(&lanca, &inimigo)){
+      kill(&inimigo);
+  }
+}
+
+void kill(objeto *inimigo){
+  free(inimigo);
+}
+
+
+int verificar_impacto(objeto *object, objeto *verificar){
+//  int pos_xfim = verificar -> pos_x + al_get_bitmap_width(verificar -> imagem_ativa);
+//  int pos_yfim = verificar -> pos_y + al_get_bitmap_height(verificar -> imagem_ativa;
 //
-//void kill(objeto *inimigo){
-//  free(inimigo);
-//}
+//  //if((objeto -> pos_y) >= )
+//  return 1;
 //
 //
-//int verificar_impacto(objeto *object, objeto *verificar){
-////  int pos_xfim = verificar -> pos_x + al_get_bitmap_width(verificar -> imagem_ativa);
-////  int pos_yfim = verificar -> pos_y + al_get_bitmap_height(verificar -> imagem_ativa;
-////
-////  //if((objeto -> pos_y) >= )
-////  return 1;
-////
-////
-//  return 0;
-//}
+  return 0;
+}
+
+int verifica_fim(ALLEGRO_BITMAP *imagem){
+  cor = al_get_pixel(imagem, personagem.pos_x, personagem.pos_y);
+  al_unmap_rgb(cor, &r, &g, &b);
+
+  if (r > 100 || g > 100 || b > 100){
+    return 1;
+  }
+  return 0;
+}
