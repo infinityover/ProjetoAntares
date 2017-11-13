@@ -504,7 +504,6 @@ void kill(objeto *inimigo){
   free(inimigo);
 }
 
-
 int verificar_impacto(objeto *object, objeto *verificar){
 //  int pos_xfim = verificar -> pos_x + al_get_bitmap_width(verificar -> imagem_ativa);
 //  int pos_yfim = verificar -> pos_y + al_get_bitmap_height(verificar -> imagem_ativa;
