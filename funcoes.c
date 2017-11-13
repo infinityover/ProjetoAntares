@@ -385,6 +385,8 @@ void finalizar()
     al_destroy_bitmap(personagem.imagem_esquerda[2]);
     al_destroy_bitmap(personagem.imagem_esquerda[3]);
     al_destroy_timer(timer);
+    al_destroy_audio_stream(musica);
+    al_destroy_sample(sample);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
 }
