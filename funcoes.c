@@ -17,6 +17,11 @@ int tela_inicial(int loop)
         {
             al_wait_for_event(fila_eventos, &evento);
 
+            if (evento.keyboard.keycode == ALLEGRO_KEY_SPACE)
+            {
+                al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+            }
+
             // Se o evento foi fechar o jogo
             if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             {
@@ -26,6 +31,8 @@ int tela_inicial(int loop)
             // Tratamento após clicar no botão novo jogo
             if(novo_jogo == 1)
             {
+                al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
+                al_set_audio_stream_playing(musica, true);
                 return 0;
             }
 
@@ -242,6 +249,42 @@ bool inicializar()
         return false;
     }
 
+    if (!al_install_audio())
+    {
+        fprintf(stderr, "Falha ao inicializar áudio.\n");
+        return false;
+    }
+
+    if (!al_init_acodec_addon())
+    {
+        fprintf(stderr, "Falha ao inicializar codecs de áudio.\n");
+        return false;
+    }
+
+    if (!al_reserve_samples(1))
+    {
+        fprintf(stderr, "Falha ao alocar canais de áudio.\n");
+        return false;
+    }
+
+    sample = al_load_sample("palmas.wav");
+    if (!sample)
+    {
+        fprintf(stderr, "Falha ao carregar sample.\n");
+        al_destroy_display(janela);
+        return false;
+    }
+
+    musica = al_load_audio_stream("mus.ogg", 4, 1024);
+    if (!musica)
+    {
+        fprintf(stderr, "Falha ao carregar audio.\n");
+        al_destroy_event_queue(fila_eventos);
+        al_destroy_display(janela);
+        al_destroy_sample(sample);
+        return false;
+    }
+
     // Cria a fila de eventos na aplicação
     fila_eventos = al_create_event_queue();
     if (!fila_eventos){
@@ -384,6 +427,8 @@ void finalizar()
     al_destroy_bitmap(personagem.imagem_esquerda[2]);
     al_destroy_bitmap(personagem.imagem_esquerda[3]);
     al_destroy_timer(timer);
+    al_destroy_audio_stream(musica);
+    al_destroy_sample(sample);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
 }
