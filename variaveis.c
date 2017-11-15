@@ -50,9 +50,12 @@ typedef struct objeto_voador{
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL, *background_exibir2 = NULL, *imagem_lanca = NULL;
+ALLEGRO_AUDIO_STREAM *musica = NULL;
+ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_EVENT evento;
 ALLEGRO_COLOR cor;
+
 
 int tecla_pressionada = 0;
 unsigned char r, g, b;
