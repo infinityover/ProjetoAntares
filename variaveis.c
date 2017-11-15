@@ -16,7 +16,7 @@ typedef struct telas{
 
 //estrutura de objetos das telas
 typedef struct objeto{
-    int pontos;
+    int ativo;
     int pos_x;
     int pos_y;
     int frame_ativo;
@@ -28,13 +28,28 @@ typedef struct objeto{
     ALLEGRO_BITMAP *imagem_direita[4];
 } objeto;
 
+
+//estrutura dos objetos que possuem rotação e se comportam de forma a ignorar a movimentação comum
+//PIOR NOME IMPOSSIVEL
+typedef struct objeto_voador{
+    int ativo;
+    int pos_x;
+    int pos_y;
+    int pos_incx;
+    int pos_incy;
+    int frame_ativo;
+    float angulo;
+    ALLEGRO_BITMAP *imagem_ativa;
+} objeto_voador;
+
+
 //=====================================================================================================
 //    INICIALIZAÇÃO DAS VARIÁVEIS  GLOBAIS
 //=====================================================================================================
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
-ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL, *background_exibir2 = NULL;
+ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL, *background_exibir2 = NULL, *imagem_lanca = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_EVENT evento;
 ALLEGRO_COLOR cor;
@@ -45,6 +60,7 @@ unsigned char r, g, b;
 botao botao_novo, botao_ajuda, botao_sair;
 telas background, background_tela1;
 objeto personagem;
+objeto_voador lanca;
 
 const int LARGURA_TELA = 1000;
 const int ALTURA_TELA = 600;

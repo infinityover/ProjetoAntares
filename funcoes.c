@@ -1,4 +1,7 @@
 struct objeto verifica_movimentacao(struct objeto);
+void move_lanca(objeto_voador*);
+void cria_lanca(objeto_voador*,ALLEGRO_EVENT*);
+
 //===================================================================================================
 //    FUNÇÕES
 //===================================================================================================
@@ -177,11 +180,11 @@ int fase_1()
                     break;
               }
           }
-          //if(evento.type == ALLEGRO_EVENT_TIMER){
-          //  if(!verifica_fim(&background_exibir2)){
-          //    loop = 1;
-          //  }
-          //}
+          if(evento.type == ALLEGRO_EVENT_TIMER){
+            if(!verifica_fim(&background_exibir2)){
+              loop = 1;
+            }
+          }
       }
       //Desenha background
       al_draw_bitmap(background_exibir, 0,0,0);
@@ -199,8 +202,86 @@ int fase_2(){
 }
 
 int fase_3(){
-  return 0;
+  //int frame_ativo = 0;
+  bool entrou = false;
+
+	personagem.pos_x = 106, personagem.pos_y = 497;
+  personagem.orientacao = 'C';
+  int loop = 0;
+  int lanca_ativa = 0;
+  // aloca o background da 1ª fase
+  background_exibir = background_tela1.tela1;
+  // aloca o background da 1ª fase
+  background_exibir2 = background_tela1.tela2;
+  al_start_timer(timer);
+  while (!loop){
+      // Verificamos se há eventos na fila
+      while (!al_is_event_queue_empty(fila_eventos)){
+          al_wait_for_event(fila_eventos, &evento);
+          // Se o evento foi fechar o jogo
+          if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+              loop = 1;
+          }
+
+          if(evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && !(lanca.ativo)){
+            cria_lanca(&lanca, &evento);
+            lanca_ativa = 1;
+          }else{
+            move_lanca(&lanca);
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER && !lanca_ativa){
+            move_lanca(&lanca);
+          }
+
+          if(evento.type == ALLEGRO_EVENT_KEY_UP)
+          {
+              entrou = true;
+          }
+          if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
+          {
+              tecla_pressionada = 0;
+              entrou = false;
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
+          {
+           personagem = verifica_movimentacao(personagem);
+          }
+          if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+              switch(evento.keyboard.keycode){
+                  case ALLEGRO_KEY_UP:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'C';
+                    break;
+                  case ALLEGRO_KEY_DOWN:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'B';
+                    break;
+                  case ALLEGRO_KEY_LEFT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'E';
+                    break;
+                  case ALLEGRO_KEY_RIGHT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'D';
+                    break;
+              }
+          }
+      }
+      //Desenha background
+      al_draw_bitmap(background_exibir, 0,0,0);
+      //Desenha Personagem quando pressionado o botão novo jogo
+      al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
+      if (lanca_ativa == 1){
+      if (!lanca.imagem_ativa){
+          printf("Erro ao imprimir imagem da lanca\n" );
+        }else
+        al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
+      }
+      // Atualiza a tela
+      al_flip_display();
+  }
 }
+
 
 bool inicializar()
 {
@@ -270,6 +351,10 @@ bool inicializar()
 
 bool carregar_imagens()
 {
+    lanca.imagem_ativa = al_load_bitmap("img/Lança(70X70).png");
+    if(!lanca.imagem_ativa){
+      printf("Erro ao carregar imagem da lança\n" );
+    }
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
     background_tela1.tela1 = al_load_bitmap("img/tela2-mapa.bmp");
@@ -479,4 +564,25 @@ int verifica_fim(ALLEGRO_BITMAP *imagem){
     return 1;
   }
   return 0;
+}
+
+void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
+  lanca -> pos_x = personagem.pos_x;
+  lanca -> pos_y = personagem.pos_y;
+  lanca -> ativo = 1;
+  lanca -> pos_incy = abs(evento -> mouse.y -  personagem.pos_y)/10;
+  lanca -> pos_incx = abs(evento -> mouse.x -  personagem.pos_x)/10;
+
+  //lanca -> angulo = sin((double)(personagem.pos_y)/(evento -> mouse.y));
+  //lanca -> angulo = lanca -> angulo;
+  return;
+}
+
+void move_lanca(objeto_voador *lanca){
+  if (lanca -> pos_y >= ALTURA_TELA || lanca -> pos_x >= LARGURA_TELA || lanca -> pos_y < 0 || lanca -> pos_x < 0){
+    lanca -> ativo = 0;
+    return;
+  }
+  lanca -> pos_y =  -lanca -> pos_incy + lanca -> pos_y;
+  lanca -> pos_x =  lanca -> pos_incx + lanca -> pos_x;
 }
