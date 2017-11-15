@@ -614,8 +614,8 @@ void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
   lanca -> pos_x = personagem.pos_x;
   lanca -> pos_y = personagem.pos_y;
   lanca -> ativo = 1;
-  lanca -> pos_incy = abs(evento -> mouse.y -  personagem.pos_y)/10;
-  lanca -> pos_incx = abs(evento -> mouse.x -  personagem.pos_x)/10;
+  lanca -> pos_incy = (evento -> mouse.y -  personagem.pos_y)/10;
+  lanca -> pos_incx = (evento -> mouse.x -  personagem.pos_x)/10;
 
   //lanca -> angulo = sin((double)(personagem.pos_y)/(evento -> mouse.y));
   //lanca -> angulo = lanca -> angulo;
@@ -627,6 +627,6 @@ void move_lanca(objeto_voador *lanca){
     lanca -> ativo = 0;
     return;
   }
-  lanca -> pos_y =  -lanca -> pos_incy + lanca -> pos_y;
+  lanca -> pos_y =  lanca -> pos_incy + lanca -> pos_y;
   lanca -> pos_x =  lanca -> pos_incx + lanca -> pos_x;
 }
