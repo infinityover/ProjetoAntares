@@ -279,7 +279,7 @@ int fase_2(){
           printf("Erro ao imprimir imagem da lanca\n" );
           }else
             al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
-            //al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+            al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
       }
       // Atualiza a tela
       al_flip_display();
