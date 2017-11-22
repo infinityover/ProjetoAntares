@@ -205,10 +205,6 @@ return 0;
 }
 
 int fase_2(){
-  return 0;
-}
-
-int fase_3(){
   //int frame_ativo = 0;
   bool entrou = false;
 
@@ -279,10 +275,11 @@ int fase_3(){
       //Desenha Personagem quando pressionado o botão novo jogo
       al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
       if (lanca_ativa == 1){
-      if (!lanca.imagem_ativa){
+        if (!lanca.imagem_ativa){
           printf("Erro ao imprimir imagem da lanca\n" );
-        }else
-        al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
+          }else
+            al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+            //al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
       }
       // Atualiza a tela
       al_flip_display();
@@ -616,8 +613,9 @@ void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
   lanca -> ativo = 1;
   lanca -> pos_incy = (evento -> mouse.y -  personagem.pos_y)/10;
   lanca -> pos_incx = (evento -> mouse.x -  personagem.pos_x)/10;
+  int hip = sqrt(pow(personagem.pos_x - evento -> mouse.x,2)+pow(personagem.pos_y - evento -> mouse.y,2));
+  lanca -> angulo = ((float)personagem.pos_x - evento -> mouse.x)/hip;
 
-  //lanca -> angulo = sin((double)(personagem.pos_y)/(evento -> mouse.y));
   //lanca -> angulo = lanca -> angulo;
   return;
 }
@@ -627,6 +625,12 @@ void move_lanca(objeto_voador *lanca){
     lanca -> ativo = 0;
     return;
   }
-  lanca -> pos_y =  lanca -> pos_incy + lanca -> pos_y;
-  lanca -> pos_x =  lanca -> pos_incx + lanca -> pos_x;
+  lanca -> pos_x =   lanca -> pos_x + lanca -> pos_incx;
+  lanca -> pos_y =  lanca -> pos_y + lanca -> pos_incy;
+  printf("%f\n",lanca ->angulo );
+  printf("personagem x %d\n",personagem.pos_x );
+  printf("personagem y %d\n",personagem.pos_y );
+
+  printf("lanca x %d\n",lanca->pos_x );
+  printf("lanca y %d\n",lanca->pos_y );
 }

@@ -38,7 +38,7 @@ int main(void){
     }
     int retorn_fase2 =  fase_2();
 
-    int retorn_fase3 =  fase_3();
+//    int retorn_fase3 =  fase_3();
 
     finalizar();
     return 0;
