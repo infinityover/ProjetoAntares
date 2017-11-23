@@ -20,10 +20,10 @@ int tela_inicial(int loop)
         {
             al_wait_for_event(fila_eventos, &evento);
 
-            if (evento.keyboard.keycode == ALLEGRO_KEY_SPACE)
-            {
-                al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-            }
+            //if (evento.keyboard.keycode == ALLEGRO_KEY_SPACE)
+            //{
+            //    al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+            //}
 
             // Se o evento foi fechar o jogo
             if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -34,8 +34,8 @@ int tela_inicial(int loop)
             // Tratamento após clicar no botão novo jogo
             if(novo_jogo == 1)
             {
-                al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
-                al_set_audio_stream_playing(musica, true);
+            //    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
+            //    al_set_audio_stream_playing(musica, true);
                 return 0;
             }
 
@@ -274,12 +274,11 @@ int fase_2(){
       al_draw_bitmap(background_exibir, 0,0,0);
       //Desenha Personagem quando pressionado o botão novo jogo
       al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
-      if (lanca_ativa == 1){
-        if (!lanca.imagem_ativa){
-          printf("Erro ao imprimir imagem da lanca\n" );
-          }else
-            al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
-            al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+      al_draw_bitmap(lobo.imagem_ativa, lobo.pos_x, lobo.pos_y, 0);
+      if (lanca.ativo==1){
+            //al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+            //al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+            al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
       }
       // Atualiza a tela
       al_flip_display();
@@ -306,9 +305,9 @@ bool inicializar()
 
     // Configura o título da janela
     al_set_window_title(janela, "Antares");
-
     // Torna apto o uso de mouse na aplicação
     if (!al_install_mouse()){
+
         fprintf(stderr, "Falha ao inicializar o mouse.\n");
         al_destroy_display(janela);
         return false;
@@ -394,6 +393,12 @@ bool carregar_imagens()
     lanca.imagem_ativa = al_load_bitmap("img/Lança(70X70).png");
     if(!lanca.imagem_ativa){
       printf("Erro ao carregar imagem da lança\n" );
+    }
+    lobo.pos_x = 250;
+    lobo.pos_y = 300;
+    lobo.imagem_ativa = al_load_bitmap("img/caveman/caveman01.png");
+    if(!lobo.imagem_ativa){
+      printf("Erro ao carregar imagem do lobo\n" );
     }
     // Alocando os backgrounds
     background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
@@ -627,10 +632,18 @@ void move_lanca(objeto_voador *lanca){
   }
   lanca -> pos_x =   lanca -> pos_x + lanca -> pos_incx;
   lanca -> pos_y =  lanca -> pos_y + lanca -> pos_incy;
-  printf("%f\n",lanca ->angulo );
-  printf("personagem x %d\n",personagem.pos_x );
-  printf("personagem y %d\n",personagem.pos_y );
+  verifica_colisao(lanca);
+}
 
-  printf("lanca x %d\n",lanca->pos_x );
-  printf("lanca y %d\n",lanca->pos_y );
+void verifica_colisao(objeto_voador *lanca){
+  int pos_xfim = (lobo.pos_x) + al_get_bitmap_width(lobo.imagem_ativa);
+  int pos_yfim = (lobo.pos_y) + al_get_bitmap_height(lobo.imagem_ativa);
+  //printf("%d\n",lanca->pos_x );
+  if (lanca->pos_x >= lobo.pos_x && lanca->pos_x <= pos_xfim){
+    //printf("passou por x\n" );
+    if(lanca->pos_y >= lobo.pos_y && lanca->pos_y <= pos_yfim ){
+      lanca->ativo=0;
+      return;
+    }
+  }
 }

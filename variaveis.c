@@ -40,6 +40,7 @@ typedef struct objeto_voador{
     int frame_ativo;
     float angulo;
     ALLEGRO_BITMAP *imagem_ativa;
+    char teste;
 } objeto_voador;
 
 
@@ -64,6 +65,7 @@ botao botao_novo, botao_ajuda, botao_sair;
 telas background, background_tela1;
 objeto personagem;
 objeto_voador lanca;
+objeto lobo;
 
 const int LARGURA_TELA = 1000;
 const int ALTURA_TELA = 600;
