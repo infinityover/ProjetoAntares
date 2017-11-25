@@ -381,18 +381,11 @@ int tela_inicial(int loop)
             {
                 if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_novo.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_novo.ativado) - 220 && evento.mouse.y <= ALTURA_TELA - 220){
                     no_novo = 1;
-                    no_ajuda = 0;
                     no_sair = 0;
 
-                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_ajuda.ativado) - 80 && evento.mouse.x <= LARGURA_TELA - 80 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_ajuda.ativado) - 140 && evento.mouse.y <= ALTURA_TELA - 140)
-                {
-                    no_novo = 0;
-                    no_sair = 0;
-                    no_ajuda = 1;
-                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 && evento.mouse.y <= ALTURA_TELA - 60)
+                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 100 && evento.mouse.y <= ALTURA_TELA - 100)
                 {
                   no_novo = 0;
-                  no_ajuda = 0;
                   no_sair = 1;
                 }
             }
@@ -403,7 +396,7 @@ int tela_inicial(int loop)
                 if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 &&
                     evento.mouse.x <= LARGURA_TELA - 35 &&
                     evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 &&
-                    evento.mouse.y <= ALTURA_TELA - 60)
+                    evento.mouse.y <= ALTURA_TELA - 100)
                 {
                     loop = 1;
                 }
@@ -431,14 +424,6 @@ int tela_inicial(int loop)
             botao_novo_exibir = botao_novo.desativado;
         }
 
-        if (no_ajuda == 1 )
-        {
-            botao_ajuda_exibir = botao_ajuda.ativado;
-        } else
-        {
-            botao_ajuda_exibir = botao_ajuda.desativado;
-        }
-
         if (no_sair == 1 )
         {
             botao_sair_exibir = botao_sair.ativado;
@@ -452,15 +437,10 @@ int tela_inicial(int loop)
         al_draw_bitmap(botao_novo_exibir, LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) -220, 0);
 
-        //Desenha BT_Ajuda
-        //al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
-        al_draw_bitmap(botao_ajuda_exibir, LARGURA_TELA - al_get_bitmap_width(botao_ajuda_exibir) - 80,
-        ALTURA_TELA - al_get_bitmap_height(botao_ajuda_exibir) - 140, 0);
-
         //Desenha BT_Sair
         //al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_sair_exibir, LARGURA_TELA - al_get_bitmap_width(botao_sair_exibir) - 35,
-        ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 60, 0);
+        ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 100, 0);
 
         // Atualiza a tela
         al_flip_display();
