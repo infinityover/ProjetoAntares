@@ -1,291 +1,3 @@
-struct objeto verifica_movimentacao(struct objeto);
-void move_lanca(objeto_voador*);
-void cria_lanca(objeto_voador*,ALLEGRO_EVENT*);
-
-//===================================================================================================
-//    FUNÇÕES
-//===================================================================================================
-
-int tela_inicial(int loop)
-{
-    int no_novo = 0, no_ajuda = 0, no_sair = 0, novo_jogo = 0;
-
-    // aloca o background da tela inicial
-    background_exibir = background.tela1;
-    al_start_timer(timer);
-
-    while (!loop){
-        // Verificamos se há eventos na fila
-        while (!al_is_event_queue_empty(fila_eventos))
-        {
-            al_wait_for_event(fila_eventos, &evento);
-
-            //if (evento.keyboard.keycode == ALLEGRO_KEY_SPACE)
-            //{
-            //    al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-            //}
-
-            // Se o evento foi fechar o jogo
-            if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            {
-                return -1;
-            }
-
-            // Tratamento após clicar no botão novo jogo
-            if(novo_jogo == 1)
-            {
-            //    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
-            //    al_set_audio_stream_playing(musica, true);
-                return 0;
-            }
-
-            // Se o evento foi movimentar o mouse
-            if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
-            {
-                if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_novo.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_novo.ativado) - 220 && evento.mouse.y <= ALTURA_TELA - 220){
-                    no_novo = 1;
-                    no_ajuda = 0;
-                    no_sair = 0;
-
-                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_ajuda.ativado) - 80 && evento.mouse.x <= LARGURA_TELA - 80 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_ajuda.ativado) - 140 && evento.mouse.y <= ALTURA_TELA - 140)
-                {
-                    no_novo = 0;
-                    no_sair = 0;
-                    no_ajuda = 1;
-                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 && evento.mouse.y <= ALTURA_TELA - 60)
-                {
-                  no_novo = 0;
-                  no_ajuda = 0;
-                  no_sair = 1;
-                }
-            }
-            // Se o evento foi um clique do mouse
-            else if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-            {
-                //click no botão sair
-                if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 &&
-                    evento.mouse.x <= LARGURA_TELA - 35 &&
-                    evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 &&
-                    evento.mouse.y <= ALTURA_TELA - 60)
-                {
-                    loop = 1;
-                }
-
-                //Click no botão novo
-                if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35 &&
-                    evento.mouse.x <= LARGURA_TELA - 35 &&
-                    evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) - 220 &&
-                    evento.mouse.y <= ALTURA_TELA - 220)
-                {
-                    novo_jogo = 1;
-                }
-            }
-        }
-
-        // Desenha o background na tela
-        al_draw_bitmap(background_exibir, 0, 0, 0);
-
-        // aloca os botões ativos
-        if (no_novo == 1 )
-        {
-            botao_novo_exibir = botao_novo.ativado;
-        } else
-        {
-            botao_novo_exibir = botao_novo.desativado;
-        }
-
-        if (no_ajuda == 1 )
-        {
-            botao_ajuda_exibir = botao_ajuda.ativado;
-        } else
-        {
-            botao_ajuda_exibir = botao_ajuda.desativado;
-        }
-
-        if (no_sair == 1 )
-        {
-            botao_sair_exibir = botao_sair.ativado;
-        } else
-        {
-            botao_sair_exibir = botao_sair.desativado;
-        }
-
-        //Desenha BT_Novo_Jogo
-        //al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
-        al_draw_bitmap(botao_novo_exibir, LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35,
-        ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) -220, 0);
-
-        //Desenha BT_Ajuda
-        //al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
-        al_draw_bitmap(botao_ajuda_exibir, LARGURA_TELA - al_get_bitmap_width(botao_ajuda_exibir) - 80,
-        ALTURA_TELA - al_get_bitmap_height(botao_ajuda_exibir) - 140, 0);
-
-        //Desenha BT_Sair
-        //al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
-        al_draw_bitmap(botao_sair_exibir, LARGURA_TELA - al_get_bitmap_width(botao_sair_exibir) - 35,
-        ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 60, 0);
-
-        // Atualiza a tela
-        al_flip_display();
-    }
-    return 0;
-}
-
-int fase_1()
-{
-  //int frame_ativo = 0;
-  bool entrou = false;
-
-	personagem.pos_x = 106, personagem.pos_y = 497;
-  personagem.orientacao = 'C';
-  int loop = 0;
-
-  // aloca o background da 1ª fase
-  background_exibir = background_tela1.tela1;
-
-  // aloca o background da 1ª fase
-  background_exibir2 = background_tela1.tela2;
-  al_start_timer(timer);
-  while (!loop){
-      // Verificamos se há eventos na fila
-      while (!al_is_event_queue_empty(fila_eventos)){
-          al_wait_for_event(fila_eventos, &evento);
-          // Se o evento foi fechar o jogo
-          if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-              loop = 1;
-          }
-          if(evento.type == ALLEGRO_EVENT_KEY_UP)
-          {
-              entrou = true;
-          }
-          if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
-          {
-              tecla_pressionada = 0;
-              entrou = false;
-          }
-          if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
-          {
-           personagem = verifica_movimentacao(personagem);
-          }
-          if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
-              switch(evento.keyboard.keycode){
-                  case ALLEGRO_KEY_UP:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'C';
-                    break;
-                  case ALLEGRO_KEY_DOWN:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'B';
-                    break;
-                  case ALLEGRO_KEY_LEFT:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'E';
-                    break;
-                  case ALLEGRO_KEY_RIGHT:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'D';
-                    break;
-              }
-          }
-          if(evento.type == ALLEGRO_EVENT_TIMER){
-            if(!verifica_fim(fase1_entradas)){
-              loop = 1;
-            }
-          }
-      }
-      //Desenha background
-      al_draw_bitmap(background_exibir, 0,0,0);
-      //al_draw_bitmap(fase1_entradas,0,0,0);
-      //Desenha Personagem quando pressionado o botão novo jogo
-      al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
-      // Atualiza a tela
-      al_flip_display();
-  }
-
-return 0;
-}
-
-int fase_2(){
-  //int frame_ativo = 0;
-  bool entrou = false;
-
-	personagem.pos_x = 106, personagem.pos_y = 497;
-  personagem.orientacao = 'C';
-  int loop = 0;
-  int lanca_ativa = 0;
-  // aloca o background da 1ª fase
-  background_exibir = background_tela1.tela1;
-  // aloca o background da 1ª fase
-  background_exibir2 = background_tela1.tela2;
-  al_start_timer(timer);
-  while (!loop){
-      // Verificamos se há eventos na fila
-      while (!al_is_event_queue_empty(fila_eventos)){
-          al_wait_for_event(fila_eventos, &evento);
-          // Se o evento foi fechar o jogo
-          if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-              loop = 1;
-          }
-
-          if(evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && !(lanca.ativo)){
-            cria_lanca(&lanca, &evento);
-            lanca_ativa = 1;
-          }else{
-            move_lanca(&lanca);
-          }
-          if(evento.type == ALLEGRO_EVENT_TIMER && !lanca_ativa){
-            move_lanca(&lanca);
-          }
-
-          if(evento.type == ALLEGRO_EVENT_KEY_UP)
-          {
-              entrou = true;
-          }
-          if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
-          {
-              tecla_pressionada = 0;
-              entrou = false;
-          }
-          if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
-          {
-           personagem = verifica_movimentacao(personagem);
-          }
-          if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
-              switch(evento.keyboard.keycode){
-                  case ALLEGRO_KEY_UP:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'C';
-                    break;
-                  case ALLEGRO_KEY_DOWN:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'B';
-                    break;
-                  case ALLEGRO_KEY_LEFT:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'E';
-                    break;
-                  case ALLEGRO_KEY_RIGHT:
-                    tecla_pressionada = 1;
-                    personagem.orientacao = 'D';
-                    break;
-              }
-          }
-      }
-      //Desenha background
-      al_draw_bitmap(background_exibir, 0,0,0);
-      //Desenha Personagem quando pressionado o botão novo jogo
-      al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
-      al_draw_bitmap(lobo.imagem_ativa, lobo.pos_x, lobo.pos_y, 0);
-      if (lanca.ativo==1){
-            //al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
-            //al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
-            al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
-      }
-      // Atualiza a tela
-      al_flip_display();
-  }
-}
-
 
 bool inicializar()
 {
@@ -592,7 +304,6 @@ void kill(objeto *inimigo){
 int verifica_fim(ALLEGRO_BITMAP *imagem){
   cor = al_get_pixel(imagem, personagem.pos_x-5, personagem.pos_y-5);
   al_unmap_rgb(cor, &r, &g, &b);
-  printf("r%d g%d b%d \n",r,g,b );
   if (r < 10 && g < 10 && b < 10){
     return 0;
   }
@@ -630,5 +341,283 @@ void verifica_colisao(objeto_voador *lanca){
       lanca->ativo=0;
       return;
     }
+  }
+}
+int tela_inicial(int loop)
+{
+    int no_novo = 0, no_ajuda = 0, no_sair = 0, novo_jogo = 0;
+
+    // aloca o background da tela inicial
+    background_exibir = background.tela1;
+    al_start_timer(timer);
+
+    while (!loop){
+        // Verificamos se há eventos na fila
+        while (!al_is_event_queue_empty(fila_eventos))
+        {
+            al_wait_for_event(fila_eventos, &evento);
+
+            //if (evento.keyboard.keycode == ALLEGRO_KEY_SPACE)
+            //{
+            //    al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+            //}
+
+            // Se o evento foi fechar o jogo
+            if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+            {
+                return -1;
+            }
+
+            // Tratamento após clicar no botão novo jogo
+            if(novo_jogo == 1)
+            {
+            //    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
+            //    al_set_audio_stream_playing(musica, true);
+                return 0;
+            }
+
+            // Se o evento foi movimentar o mouse
+            if (evento.type == ALLEGRO_EVENT_MOUSE_AXES)
+            {
+                if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_novo.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_novo.ativado) - 220 && evento.mouse.y <= ALTURA_TELA - 220){
+                    no_novo = 1;
+                    no_ajuda = 0;
+                    no_sair = 0;
+
+                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_ajuda.ativado) - 80 && evento.mouse.x <= LARGURA_TELA - 80 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_ajuda.ativado) - 140 && evento.mouse.y <= ALTURA_TELA - 140)
+                {
+                    no_novo = 0;
+                    no_sair = 0;
+                    no_ajuda = 1;
+                } else if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 && evento.mouse.x <= LARGURA_TELA - 35 && evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 && evento.mouse.y <= ALTURA_TELA - 60)
+                {
+                  no_novo = 0;
+                  no_ajuda = 0;
+                  no_sair = 1;
+                }
+            }
+            // Se o evento foi um clique do mouse
+            else if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+            {
+                //click no botão sair
+                if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 &&
+                    evento.mouse.x <= LARGURA_TELA - 35 &&
+                    evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 &&
+                    evento.mouse.y <= ALTURA_TELA - 60)
+                {
+                    loop = 1;
+                }
+
+                //Click no botão novo
+                if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35 &&
+                    evento.mouse.x <= LARGURA_TELA - 35 &&
+                    evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) - 220 &&
+                    evento.mouse.y <= ALTURA_TELA - 220)
+                {
+                    novo_jogo = 1;
+                }
+            }
+        }
+
+        // Desenha o background na tela
+        al_draw_bitmap(background_exibir, 0, 0, 0);
+
+        // aloca os botões ativos
+        if (no_novo == 1 )
+        {
+            botao_novo_exibir = botao_novo.ativado;
+        } else
+        {
+            botao_novo_exibir = botao_novo.desativado;
+        }
+
+        if (no_ajuda == 1 )
+        {
+            botao_ajuda_exibir = botao_ajuda.ativado;
+        } else
+        {
+            botao_ajuda_exibir = botao_ajuda.desativado;
+        }
+
+        if (no_sair == 1 )
+        {
+            botao_sair_exibir = botao_sair.ativado;
+        } else
+        {
+            botao_sair_exibir = botao_sair.desativado;
+        }
+
+        //Desenha BT_Novo_Jogo
+        //al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
+        al_draw_bitmap(botao_novo_exibir, LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35,
+        ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) -220, 0);
+
+        //Desenha BT_Ajuda
+        //al_convert_mask_to_alpha(botao_ajuda_exibir,al_map_rgb(255,0,255));
+        al_draw_bitmap(botao_ajuda_exibir, LARGURA_TELA - al_get_bitmap_width(botao_ajuda_exibir) - 80,
+        ALTURA_TELA - al_get_bitmap_height(botao_ajuda_exibir) - 140, 0);
+
+        //Desenha BT_Sair
+        //al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
+        al_draw_bitmap(botao_sair_exibir, LARGURA_TELA - al_get_bitmap_width(botao_sair_exibir) - 35,
+        ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 60, 0);
+
+        // Atualiza a tela
+        al_flip_display();
+    }
+    return 0;
+}
+
+int fase_1()
+{
+  //int frame_ativo = 0;
+  bool entrou = false;
+
+	personagem.pos_x = 106, personagem.pos_y = 497;
+  personagem.orientacao = 'C';
+  int loop = 0;
+
+  // aloca o background da 1ª fase
+  background_exibir = background_tela1.tela1;
+
+  // aloca o background da 1ª fase
+  background_exibir2 = background_tela1.tela2;
+  al_start_timer(timer);
+  while (!loop){
+      // Verificamos se há eventos na fila
+      while (!al_is_event_queue_empty(fila_eventos)){
+          al_wait_for_event(fila_eventos, &evento);
+          // Se o evento foi fechar o jogo
+          if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+              loop = 1;
+          }
+          if(evento.type == ALLEGRO_EVENT_KEY_UP)
+          {
+              entrou = true;
+          }
+          if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
+          {
+              tecla_pressionada = 0;
+              entrou = false;
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
+          {
+           personagem = verifica_movimentacao(personagem);
+          }
+          if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+              switch(evento.keyboard.keycode){
+                  case ALLEGRO_KEY_UP:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'C';
+                    break;
+                  case ALLEGRO_KEY_DOWN:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'B';
+                    break;
+                  case ALLEGRO_KEY_LEFT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'E';
+                    break;
+                  case ALLEGRO_KEY_RIGHT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'D';
+                    break;
+              }
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER){
+            if(!verifica_fim(fase1_entradas)){
+              loop = 1;
+            }
+          }
+      }
+      //Desenha background
+      al_draw_bitmap(background_exibir, 0,0,0);
+      //Desenha Personagem quando pressionado o botão novo jogo
+      al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
+      // Atualiza a tela
+      al_flip_display();
+  }
+
+return 0;
+}
+
+int fase_2(){
+  //int frame_ativo = 0;
+  bool entrou = false;
+
+	personagem.pos_x = 106, personagem.pos_y = 497;
+  personagem.orientacao = 'C';
+  int loop = 0;
+  int lanca_ativa = 0;
+  // aloca o background da 1ª fase
+  background_exibir = background_tela1.tela1;
+  // aloca o background da 1ª fase
+  background_exibir2 = background_tela1.tela2;
+  al_start_timer(timer);
+  while (!loop){
+      // Verificamos se há eventos na fila
+      while (!al_is_event_queue_empty(fila_eventos)){
+          al_wait_for_event(fila_eventos, &evento);
+          // Se o evento foi fechar o jogo
+          if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+              loop = 1;
+          }
+
+          if(evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && !(lanca.ativo)){
+            cria_lanca(&lanca, &evento);
+            lanca_ativa = 1;
+          }else{
+            move_lanca(&lanca);
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER && !lanca_ativa){
+            move_lanca(&lanca);
+          }
+
+          if(evento.type == ALLEGRO_EVENT_KEY_UP)
+          {
+              entrou = true;
+          }
+          if (entrou == true && personagem.frame_ativo == 0 && evento.type != ALLEGRO_EVENT_KEY_DOWN)
+          {
+              tecla_pressionada = 0;
+              entrou = false;
+          }
+          if(evento.type == ALLEGRO_EVENT_TIMER && tecla_pressionada == 1)
+          {
+           personagem = verifica_movimentacao(personagem);
+          }
+          if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+              switch(evento.keyboard.keycode){
+                  case ALLEGRO_KEY_UP:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'C';
+                    break;
+                  case ALLEGRO_KEY_DOWN:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'B';
+                    break;
+                  case ALLEGRO_KEY_LEFT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'E';
+                    break;
+                  case ALLEGRO_KEY_RIGHT:
+                    tecla_pressionada = 1;
+                    personagem.orientacao = 'D';
+                    break;
+              }
+          }
+      }
+      //Desenha background
+      al_draw_bitmap(background_exibir, 0,0,0);
+      //Desenha Personagem quando pressionado o botão novo jogo
+      al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
+      al_draw_bitmap(lobo.imagem_ativa, lobo.pos_x, lobo.pos_y, 0);
+      if (lanca.ativo==1){
+            //al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+            //al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
+            al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
+      }
+      // Atualiza a tela
+      al_flip_display();
   }
 }
