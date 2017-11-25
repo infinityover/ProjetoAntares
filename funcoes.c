@@ -109,8 +109,8 @@ bool carregar_imagens()
 
     fase1_entradas = al_load_bitmap("img/Entradas_Fase1.bmp");
 
-    javali.pos_x = 250;
-    javali.pos_y = 300;
+    javali.pos_x = 90;
+    javali.pos_y = 90;
 
     javali.imagem_baixo[0] = al_load_bitmap("img/javali/java2.png");
     javali.imagem_baixo[1] = al_load_bitmap("img/javali/java3.png");
@@ -567,10 +567,11 @@ int fase_2(){
 	personagem.pos_x = 106, personagem.pos_y = 497;
   personagem.orientacao = 'C';
 
-  javali.pos_x = 200, javali.pos_y = 200;
-
   int loop = 0;
   int lanca_ativa = 0;
+  int pos_dir = 1;
+  int pos_esq = 0;
+
   al_start_timer(timer);
   while (!loop){
       // Verificamos se há eventos na fila
@@ -636,35 +637,25 @@ int fase_2(){
           javali.frame_ativo++;
       }
 
-      if (javali.pos_x <= 801 && javali.pos_y <= 201){
+      if (javali.pos_x <= 800 && pos_dir == 1){
         javali.imagem_ativa = javali.imagem_direita[javali.frame_ativo];
 
-        if (javali.pos_x == 800)
-          javali.imagem_ativa = javali.imagem_baixo[javali.frame_ativo];
-
+        if (javali.pos_x == 800){
+          javali.imagem_ativa = javali.imagem_esquerda[javali.frame_ativo];
+          pos_dir = 0;
+          pos_esq = 1;
+        }
       al_draw_bitmap(javali.imagem_ativa, javali.pos_x++, javali.pos_y, 0);
-    }else if (javali.pos_y <= 401 && javali.pos_x >= 800){
-        javali.imagem_ativa = javali.imagem_baixo[javali.frame_ativo];
-
-        if (javali.pos_y == 400)
+    }else if (javali.pos_x >= 90 && pos_esq == 1){
           javali.imagem_ativa = javali.imagem_esquerda[javali.frame_ativo];
 
-      al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y++, 0);
-    }else if (javali.pos_x >= 201 && javali.pos_y >= 400){
-        javali.imagem_ativa = javali.imagem_esquerda[javali.frame_ativo];
-
-        if (javali.pos_x == 200)
-          javali.imagem_ativa = javali.imagem_cima[javali.frame_ativo];
-
-      al_draw_bitmap(javali.imagem_ativa, javali.pos_x--, javali.pos_y, 0);
-    }else if (javali.pos_y >= 101 && javali.pos_x <= 401){
-        javali.imagem_ativa = javali.imagem_cima[javali.frame_ativo];
-
-        if (javali.pos_y == 100)
-          javali.imagem_ativa = javali.imagem_direita[javali.frame_ativo];
-
-      al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y--, 0);
-    }
+          if (javali.pos_x == 90){
+            javali.imagem_ativa = javali.imagem_direita[javali.frame_ativo];
+            pos_dir = 1;
+            pos_esq = 0;
+          }
+        al_draw_bitmap(javali.imagem_ativa, javali.pos_x--, javali.pos_y, 0);
+      }
 
       if (lanca.ativo==1){
             al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
