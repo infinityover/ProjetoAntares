@@ -112,45 +112,26 @@ bool carregar_imagens()
     javali.pos_x = 90;
     javali.pos_y = 90;
 
-    javali.imagem_baixo[0] = al_load_bitmap("img/javali/java2.png");
-    javali.imagem_baixo[1] = al_load_bitmap("img/javali/java3.png");
-    javali.imagem_baixo[2] = al_load_bitmap("img/javali/java2.png");
-    javali.imagem_baixo[3] = al_load_bitmap("img/javali/java1.png");
-    if (!javali.imagem_baixo[0] || !javali.imagem_baixo[1] || !javali.imagem_baixo[2] || !javali.imagem_baixo[3])
-    {
-        printf("erro ao carregar imagens javali baixo");
-        return false;
-    }
-
-    javali.imagem_esquerda[0] = al_load_bitmap("img/javali/java5.png");
-    javali.imagem_esquerda[1] = al_load_bitmap("img/javali/java4.png");
-    javali.imagem_esquerda[2] = al_load_bitmap("img/javali/java6.png");
-    javali.imagem_esquerda[3] = al_load_bitmap("img/javali/java5.png");
+    javali.imagem_esquerda[0] = al_load_bitmap("img/javali/5.png");
+    javali.imagem_esquerda[1] = al_load_bitmap("img/javali/4.png");
+    javali.imagem_esquerda[2] = al_load_bitmap("img/javali/6.png");
+    javali.imagem_esquerda[3] = al_load_bitmap("img/javali/5.png");
     if (!javali.imagem_esquerda[0] || !javali.imagem_esquerda[1] || !javali.imagem_esquerda[2] || !javali.imagem_esquerda[3])
     {
         printf("erro ao carregar imagens javali esquerda");
         return false;
     }
 
-    javali.imagem_direita[0] = al_load_bitmap("img/javali/java8.png");
-    javali.imagem_direita[1] = al_load_bitmap("img/javali/java9.png");
-    javali.imagem_direita[2] = al_load_bitmap("img/javali/java7.png");
-    javali.imagem_direita[3] = al_load_bitmap("img/javali/java8.png");
+    javali.imagem_direita[0] = al_load_bitmap("img/javali/2.png");
+    javali.imagem_direita[1] = al_load_bitmap("img/javali/1.png");
+    javali.imagem_direita[2] = al_load_bitmap("img/javali/3.png");
+    javali.imagem_direita[3] = al_load_bitmap("img/javali/2.png");
     if (!javali.imagem_direita[0] || !javali.imagem_direita[1] || !javali.imagem_direita[2] || !javali.imagem_direita[3])
     {
         printf("erro ao carregar imagens javali direita");
         return false;
     }
 
-    javali.imagem_cima[0] = al_load_bitmap("img/javali/java11.png");
-    javali.imagem_cima[1] = al_load_bitmap("img/javali/java12.png");
-    javali.imagem_cima[2] = al_load_bitmap("img/javali/java10.png");
-    javali.imagem_cima[3] = al_load_bitmap("img/javali/java11.png");
-    if (!javali.imagem_cima[0] || !javali.imagem_cima[1] || !javali.imagem_cima[2] || !javali.imagem_cima[3])
-    {
-        printf("erro ao carregar imagens javali cima");
-        return false;
-    }
 
     javali.imagem_ativa = javali.imagem_direita[0];
 
