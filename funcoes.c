@@ -188,13 +188,14 @@ int fase_1()
               }
           }
           if(evento.type == ALLEGRO_EVENT_TIMER){
-            if(!verifica_fim(&background_exibir2)){
+            if(!verifica_fim(fase1_entradas)){
               loop = 1;
             }
           }
       }
       //Desenha background
       al_draw_bitmap(background_exibir, 0,0,0);
+      //al_draw_bitmap(fase1_entradas,0,0,0);
       //Desenha Personagem quando pressionado o botão novo jogo
       al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
       // Atualiza a tela
@@ -396,6 +397,8 @@ bool carregar_imagens()
     }
     lobo.pos_x = 250;
     lobo.pos_y = 300;
+
+    fase1_entradas = al_load_bitmap("img/Entradas_Fase1.bmp");
     lobo.imagem_ativa = al_load_bitmap("img/caveman/caveman01.png");
     if(!lobo.imagem_ativa){
       printf("Erro ao carregar imagem do lobo\n" );
@@ -581,35 +584,19 @@ struct objeto verifica_movimentacao(struct objeto personagem)
     return personagem;
 }
 
-void lancar(objeto *lanca, objeto *inimigo){
-  if(verificar_impacto(&lanca, &inimigo)){
-      kill(&inimigo);
-  }
-}
-
 void kill(objeto *inimigo){
   free(inimigo);
 }
 
-int verificar_impacto(objeto *object, objeto *verificar){
-//  int pos_xfim = verificar -> pos_x + al_get_bitmap_width(verificar -> imagem_ativa);
-//  int pos_yfim = verificar -> pos_y + al_get_bitmap_height(verificar -> imagem_ativa;
-//
-//  //if((objeto -> pos_y) >= )
-//  return 1;
-//
-//
-  return 0;
-}
 
 int verifica_fim(ALLEGRO_BITMAP *imagem){
-  cor = al_get_pixel(imagem, personagem.pos_x, personagem.pos_y);
+  cor = al_get_pixel(imagem, personagem.pos_x-5, personagem.pos_y-5);
   al_unmap_rgb(cor, &r, &g, &b);
-
-  if (r > 100 || g > 100 || b > 100){
-    return 1;
+  printf("r%d g%d b%d \n",r,g,b );
+  if (r < 10 && g < 10 && b < 10){
+    return 0;
   }
-  return 0;
+  return 1;
 }
 
 void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
@@ -621,7 +608,6 @@ void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
   int hip = sqrt(pow(personagem.pos_x - evento -> mouse.x,2)+pow(personagem.pos_y - evento -> mouse.y,2));
   lanca -> angulo = ((float)personagem.pos_x - evento -> mouse.x)/hip;
 
-  //lanca -> angulo = lanca -> angulo;
   return;
 }
 
@@ -638,9 +624,8 @@ void move_lanca(objeto_voador *lanca){
 void verifica_colisao(objeto_voador *lanca){
   int pos_xfim = (lobo.pos_x) + al_get_bitmap_width(lobo.imagem_ativa);
   int pos_yfim = (lobo.pos_y) + al_get_bitmap_height(lobo.imagem_ativa);
-  //printf("%d\n",lanca->pos_x );
+
   if (lanca->pos_x >= lobo.pos_x && lanca->pos_x <= pos_xfim){
-    //printf("passou por x\n" );
     if(lanca->pos_y >= lobo.pos_y && lanca->pos_y <= pos_yfim ){
       lanca->ativo=0;
       return;
