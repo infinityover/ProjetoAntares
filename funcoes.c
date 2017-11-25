@@ -522,7 +522,6 @@ return 0;
 }
 
 int fase_2(){
-  //int frame_ativo = 0;
   bool entrou = false;
 
 	personagem.pos_x = 106, personagem.pos_y = 497;
