@@ -2,7 +2,6 @@
 bool inicializar()
 {
     // Inicializa o Allegro
-    //al_init();
     if (!al_init()){
         fprintf(stderr, "Falha ao inicializar a Allegro.\n");
         return false;
@@ -378,6 +377,7 @@ void verifica_colisao(objeto_voador *lanca){
   if (lanca->pos_x >= javali.pos_x && lanca->pos_x <= pos_xfim){
     if(lanca->pos_y >= javali.pos_y && lanca->pos_y <= pos_yfim ){
       lanca->ativo=0;
+      //kill(javali);
       return;
     }
   }
@@ -473,12 +473,10 @@ int tela_inicial(int loop)
         }
 
         //Desenha BT_Novo_Jogo
-        //al_convert_mask_to_alpha(botao_novo_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_novo_exibir, LARGURA_TELA - al_get_bitmap_width(botao_novo_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_novo_exibir) -220, 0);
 
         //Desenha BT_Sair
-        //al_convert_mask_to_alpha(botao_sair_exibir,al_map_rgb(255,0,255));
         al_draw_bitmap(botao_sair_exibir, LARGURA_TELA - al_get_bitmap_width(botao_sair_exibir) - 35,
         ALTURA_TELA - al_get_bitmap_height(botao_sair_exibir) - 100, 0);
 
@@ -562,6 +560,8 @@ int fase_1()
 
 int fase_2(){
   //int frame_ativo = 0;
+  background_exibir = al_load_bitmap("img/Tela-campo.bmp");
+  background_exibir2 = al_load_bitmap("img/Fase2_transparencia.bmp");
   bool entrou = false;
 
 	personagem.pos_x = 106, personagem.pos_y = 497;
@@ -571,10 +571,6 @@ int fase_2(){
 
   int loop = 0;
   int lanca_ativa = 0;
-  // aloca o background da 1ª fase
-  background_exibir = background_tela1.tela1;
-  // aloca o background da 1ª fase
-  background_exibir2 = background_tela1.tela2;
   al_start_timer(timer);
   while (!loop){
       // Verificamos se há eventos na fila
@@ -671,8 +667,6 @@ int fase_2(){
     }
 
       if (lanca.ativo==1){
-            //al_draw_rotated_bitmap(lanca.imagem_ativa,LARGURA_TELA/2, ALTURA_TELA/2, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
-            //al_draw_rotated_bitmap(lanca.imagem_ativa, lanca.pos_x-35, lanca.pos_y-35, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
             al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
       }
       // Atualiza a tela
