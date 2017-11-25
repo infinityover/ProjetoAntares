@@ -65,7 +65,7 @@ botao botao_novo, botao_ajuda, botao_sair;
 telas background, background_tela1;
 objeto personagem;
 objeto_voador lanca;
-objeto lobo;
+objeto javali;
 
 const int LARGURA_TELA = 1000;
 const int ALTURA_TELA = 600;
