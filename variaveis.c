@@ -56,7 +56,7 @@ ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_EVENT evento;
 ALLEGRO_COLOR cor;
-
+unsigned int clock1;
 
 int tecla_pressionada = 0;
 unsigned char r, g, b;
