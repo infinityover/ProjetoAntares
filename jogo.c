@@ -21,14 +21,16 @@ int main(void){
   if (!carregar_imagens())
       return -1;
 
-  while (retorno_tela_inicial != -1 || retorno_fase1 != -1 || retorn_fase2 != -1) {
-    retorno_tela_inicial = tela_inicial(loop);
+  retorno_tela_inicial = tela_inicial(loop);
 
-    if (retorno_tela_inicial == -1)
-    {
-    	finalizar();
-    	return -1;
-    }
+  if (retorno_tela_inicial == -1)
+  {
+    finalizar();
+    return -1;
+  }
+
+  while (retorno_tela_inicial != -1 || retorno_fase1 != -1 || retorn_fase2 != -1) {
+
 
     retorno_fase1 = fase_1(retorno_tela_inicial, loop);
 

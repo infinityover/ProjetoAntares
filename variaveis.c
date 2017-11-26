@@ -38,9 +38,12 @@ typedef struct objeto_voador{
     int pos_y;
     int pos_incx;
     int pos_incy;
+    int destinox;
+    int destinoy;
     int frame_ativo;
     float angulo;
     ALLEGRO_BITMAP *imagem_ativa;
+    ALLEGRO_BITMAP *imagem[2];
     char teste;
 } objeto_voador;
 
@@ -52,8 +55,8 @@ typedef struct objeto_voador{
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL, *background_exibir2 = NULL, *imagem_lanca = NULL, *fase1_entradas = NULL;
-ALLEGRO_AUDIO_STREAM *musica = NULL;
-ALLEGRO_SAMPLE *sample = NULL;
+ALLEGRO_AUDIO_STREAM *musica[3];
+ALLEGRO_SAMPLE *sample[2];
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_EVENT evento;
 ALLEGRO_COLOR cor;
@@ -70,3 +73,4 @@ objeto javali;
 
 const int LARGURA_TELA = 1000;
 const int ALTURA_TELA = 600;
+#define PI 3.14159265
