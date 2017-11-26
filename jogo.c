@@ -13,14 +13,15 @@
 //=====================================================================================================
 
 int main(void){
-    int retorno_tela_inicial = 0, retorno_fase1 = 0, loop = 0;
+  int retorno_tela_inicial = 0, retorno_fase1 = 0, retorn_fase2 = 0, loop = 0;
 
-    if (!inicializar())
-        return -1;
+  if (!inicializar())
+      return -1;
 
-    if (!carregar_imagens())
-        return -1;
+  if (!carregar_imagens())
+      return -1;
 
+  while (retorno_tela_inicial != -1 || retorno_fase1 != -1 || retorn_fase2 != -1) {
     retorno_tela_inicial = tela_inicial(loop);
 
     if (retorno_tela_inicial == -1)
@@ -29,17 +30,23 @@ int main(void){
     	return -1;
     }
 
-	retorno_fase1 = fase_1(retorno_tela_inicial, loop);
+    retorno_fase1 = fase_1(retorno_tela_inicial, loop);
 
     if (retorno_fase1 == -1)
     {
     	finalizar();
     	return -1;
     }
-    int retorn_fase2 =  fase_2();
 
-//    int retorn_fase3 =  fase_3();
+    retorn_fase2 = fase_2();
 
-    finalizar();
-    return 0;
+    if (retorn_fase2 == -1)
+    {
+      finalizar();
+      return -1;
+    }
+  }
+
+  finalizar();
+  return 0;
 }

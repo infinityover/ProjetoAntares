@@ -26,6 +26,7 @@ typedef struct objeto{
     ALLEGRO_BITMAP *imagem_baixo[4];
     ALLEGRO_BITMAP *imagem_esquerda[4];
     ALLEGRO_BITMAP *imagem_direita[4];
+    ALLEGRO_BITMAP *imagem_morto[4];
 } objeto;
 
 
