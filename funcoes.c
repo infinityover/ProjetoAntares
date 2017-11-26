@@ -620,16 +620,17 @@ int fase_2(){
       } else{
           javali.frame_ativo++;
       }
-      if(clock1%10 == 0){
+      if(clock1%5 == 0){
         if (javali.pos_x <= 800 && pos_dir == 1){
           javali.imagem_ativa = javali.imagem_direita[javali.frame_ativo];
 
-          if (javali.pos_x == 800){
+          if (javali.pos_x >= 790){
             javali.imagem_ativa = javali.imagem_esquerda[javali.frame_ativo];
             pos_dir = 0;
             pos_esq = 1;
           }
-          javali.pos_x++;
+          javali.pos_x += 10;
+          al_draw_bitmap(javali.imagem_ativa, javali.pos_x++, javali.pos_y, 0);
       }else if (javali.pos_x >= 90 && pos_esq == 1){
             javali.imagem_ativa = javali.imagem_esquerda[javali.frame_ativo];
 
@@ -637,12 +638,13 @@ int fase_2(){
               javali.imagem_ativa = javali.imagem_direita[javali.frame_ativo];
               pos_dir = 1;
               pos_esq = 0;
-              javali.pos_x--;
             }
-            //al_draw_bitmap(javali.imagem_ativa, javali.pos_x--, javali.pos_y, 0);
+            javali.pos_x -= 10;
+            al_draw_bitmap(javali.imagem_ativa, javali.pos_x--, javali.pos_y, 0);
         }
-      }
-      al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y, 0);
+    }
+    al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y, 0);
+
       if (lanca.ativo==1){
             al_draw_bitmap(lanca.imagem_ativa, lanca.pos_x, lanca.pos_y, 0);
       }
