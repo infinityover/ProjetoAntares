@@ -5,8 +5,8 @@
 #include <allegro5/allegro_acodec.h>
 #include <math.h>
 #include <stdio.h>
-#include "variaveis.c"
-#include "funcoes.c"
+#include "variaveis.h"
+#include "funcoes.h"
 
 //=====================================================================================================
 //    CÓDIGO PRINCIPAL DO JOGO

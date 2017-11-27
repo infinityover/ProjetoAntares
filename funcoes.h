@@ -56,30 +56,16 @@ bool inicializar()
         return false;
     }
 
-    sample[0] = al_load_sample("sounds/clicar-botao.ogg");
-    sample[1] = al_load_sample("sounds/caminhar.ogg");
+    sample[0] = al_load_sample("sounds/tela-mapa.ogg");
+    sample[1] = al_load_sample("sounds/fase2-caca.ogg");
+    sample[2] = al_load_sample("sounds/som-de-vitoria.ogg");
 
-    if (!sample[0] || !sample[1])
+    if (!sample[0] || !sample[1] || !sample[2])
     {
         fprintf(stderr, "Falha ao carregar samples.\n");
         al_destroy_display(janela);
         al_destroy_sample(sample[0]);
         al_destroy_sample(sample[1]);
-        return false;
-    }
-
-    musica[0] = al_load_audio_stream("sounds/tela-mapa.ogg", 4, 1024);
-    musica[1] = al_load_audio_stream("sounds/fase2-caca.ogg", 4, 1024);
-    musica[2] = al_load_audio_stream("sounds/som-de-vitoria.ogg", 4, 1024);
-
-    if (!musica[0] || !musica[1] || !musica[2])
-    {
-        fprintf(stderr, "Falha ao carregar audios.\n");
-        al_destroy_event_queue(fila_eventos);
-        al_destroy_display(janela);
-        al_destroy_audio_stream(musica[0]);
-        al_destroy_audio_stream(musica[1]);
-        al_destroy_audio_stream(musica[2]);
         return false;
     }
 
@@ -214,7 +200,7 @@ bool carregar_imagens()
         return false;
     }
 
-    personagem.imagem_ativa = personagem.imagem_cima[3];
+    personagem.imagem_ativa = personagem.imagem_baixo[3];
 
     if (!botao_novo.desativado || !botao_novo.ativado)
     {
@@ -264,9 +250,6 @@ void finalizar()
     al_destroy_bitmap(personagem.imagem_esquerda[2]);
     al_destroy_bitmap(personagem.imagem_esquerda[3]);
     al_destroy_timer(timer);
-    al_destroy_audio_stream(musica[0]);
-    al_destroy_audio_stream(musica[1]);
-    al_destroy_audio_stream(musica[2]);
     al_destroy_sample(sample[0]);
     al_destroy_sample(sample[1]);
     al_destroy_display(janela);
@@ -348,8 +331,8 @@ void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
   lanca->pos_x = personagem.pos_x;
   lanca->pos_y = personagem.pos_y;
   lanca->ativo = 1;
-  lanca->pos_incy = (evento->mouse.y - personagem.pos_y)/10;
-  lanca->pos_incx = (evento->mouse.x - personagem.pos_x)/10;
+  lanca->pos_incy = (evento->mouse.y - personagem.pos_y)/50;
+  lanca->pos_incx = (evento->mouse.x - personagem.pos_x)/50;
 
   if (evento->mouse.y < personagem.pos_y){
     A = personagem.pos_x - LARGURA_TELA;
@@ -387,14 +370,12 @@ void verifica_colisao(objeto_voador *lanca, int *morto){
       *morto = 1;
       clock1 = 0;
       javali.frame_ativo = 0;
-      al_set_audio_stream_playing(musica[1], false);
+      al_stop_sample(&ret_id);
 
-      al_attach_audio_stream_to_mixer(musica[2], al_get_default_mixer());
-      al_set_audio_stream_playing(musica[2], true);
+      al_play_sample(sample[2], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, ret_id);
     }
   }
-
-  return 0;
+  return;
 }
 
 int tela_inicial(int loop)
@@ -420,8 +401,8 @@ int tela_inicial(int loop)
             // Tratamento após clicar no botão novo jogo
             if(novo_jogo == 1)
             {
-              al_attach_audio_stream_to_mixer(musica[0], al_get_default_mixer());
-              al_set_audio_stream_playing(musica[0], true);
+              //al_attach_audio_stream_to_mixer(musica[0], al_get_default_mixer());
+              //al_set_audio_stream_playing(musica[0], true);
               novo_jogo = 0;
               return 0;
             }
@@ -445,7 +426,7 @@ int tela_inicial(int loop)
                 //click no botão sair
                 if (evento.mouse.x >= LARGURA_TELA - al_get_bitmap_width(botao_sair.ativado) - 35 &&
                     evento.mouse.x <= LARGURA_TELA - 35 &&
-                    evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 60 &&
+                    evento.mouse.y >= ALTURA_TELA - al_get_bitmap_height(botao_sair.ativado) - 100 &&
                     evento.mouse.y <= ALTURA_TELA - 100)
                 {
                     return -1;
@@ -459,7 +440,7 @@ int tela_inicial(int loop)
                     evento.mouse.y <= ALTURA_TELA - 220)
                 {
                     novo_jogo = 1;
-                    al_play_sample(sample[0], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+                    al_play_sample(sample[0], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, ret_id);
                 }
             }
         }
@@ -504,7 +485,7 @@ int fase_1()
   bool entrou = false;
 
 	personagem.pos_x = 106, personagem.pos_y = 497;
-  personagem.orientacao = 'C';
+  personagem.orientacao = 'B';
   int loop = 0;
 
   // aloca o background da 1ª fase
@@ -557,15 +538,14 @@ int fase_1()
           }
           if(evento.type == ALLEGRO_EVENT_TIMER){
             if(!verifica_fim(fase1_entradas)){
-              al_set_audio_stream_playing(musica[0], false);
+              al_stop_sample(&ret_id);
 
-              al_attach_audio_stream_to_mixer(musica[1], al_get_default_mixer());
-              al_set_audio_stream_playing(musica[1], true);
-
+              al_play_sample(sample[1], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, ret_id);
               loop = 1;
             }
           }
       }
+
       //Desenha background
       al_draw_bitmap(background_exibir, 0,0,0);
       //Desenha Personagem quando pressionado o botão novo jogo
@@ -578,13 +558,13 @@ int fase_1()
 }
 
 int fase_2(){
-  //int frame_ativo = 0;
+
   background_exibir = al_load_bitmap("img/Tela-campo.bmp");
   background_exibir2 = al_load_bitmap("img/Fase2_transparencia.bmp");
   bool entrou = false;
 
 	personagem.pos_x = 106, personagem.pos_y = 497;
-  personagem.orientacao = 'C';
+  personagem.orientacao = 'B';
 
   int loop = 0;
   int lanca_ativa = 0;
@@ -664,7 +644,7 @@ int fase_2(){
       }
     }
 
-    if(morto != 1 && clock1%2 == 0){
+    if(morto != 1 ){
       if (javali.pos_x <= 800 && pos_dir == 1){
         javali.imagem_ativa = javali.imagem_direita[javali.frame_ativo];
 
@@ -674,7 +654,6 @@ int fase_2(){
           pos_esq = 1;
         }
         javali.pos_x += 10;
-        // al_draw_bitmap(javali.imagem_ativa, javali.pos_x++, javali.pos_y, 0);
       }else if (javali.pos_x >= 90 && pos_esq == 1){
         javali.imagem_ativa = javali.imagem_esquerda[javali.frame_ativo];
 
@@ -685,7 +664,6 @@ int fase_2(){
         }
 
         javali.pos_x -= 10;
-        //al_draw_bitmap(javali.imagem_ativa, , javali.pos_y, 0);
       }
     } else if (morto == 1) {
       javali.imagem_ativa = javali.imagem_morto[javali.frame_ativo];
@@ -697,8 +675,7 @@ int fase_2(){
       }
     }
 
-    //if (morto != 1)
-      al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y, 0);
+    al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y, 0);
 
     if (lanca.ativo == 1){
       al_draw_rotated_bitmap(lanca.imagem_ativa, 0, 0, lanca.pos_x, lanca.pos_y, lanca.angulo, 0);
