@@ -10,8 +10,8 @@ typedef struct botao{
 
 //estrutura das telas do jogo
 typedef struct telas{
-    ALLEGRO_BITMAP *tela1;
-    ALLEGRO_BITMAP *tela2;
+    ALLEGRO_BITMAP *ativo[3];
+    ALLEGRO_BITMAP *imagem[5];
 } telas;
 
 //estrutura de objetos das telas
@@ -38,8 +38,6 @@ typedef struct objeto_voador{
     int pos_y;
     int pos_incx;
     int pos_incy;
-    int destinox;
-    int destinoy;
     int frame_ativo;
     float angulo;
     ALLEGRO_BITMAP *imagem_ativa;
@@ -54,7 +52,7 @@ typedef struct objeto_voador{
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
-ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *background_exibir = NULL, *background_exibir2 = NULL, *imagem_lanca = NULL, *fase1_entradas = NULL;
+ALLEGRO_BITMAP *botao_novo_exibir = NULL, *botao_ajuda_exibir = NULL, *botao_sair_exibir = NULL, *imagem_lanca = NULL;
 ALLEGRO_SAMPLE *sample[3];
 ALLEGRO_SAMPLE_ID *ret_id;
 ALLEGRO_TIMER *timer = NULL;
@@ -66,7 +64,8 @@ int tecla_pressionada = 0;
 unsigned char r, g, b;
 
 botao botao_novo, botao_ajuda, botao_sair;
-telas background, background_tela1;
+telas backgrounds;
+telas backgrounds_T; //Transparecias
 objeto personagem;
 objeto_voador lanca;
 objeto javali;
