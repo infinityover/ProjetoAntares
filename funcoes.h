@@ -2,7 +2,7 @@ bool inicializar()
 {
   // Inicializa o Allegro
   if (!al_init()){
-    fprintf(stderr, "Falha ao inicializar a Allegro.\n");
+    fprintf(stderr, "Erro ao inicializar a Allegro.\n");
     return false;
   }
 
@@ -10,7 +10,7 @@ bool inicializar()
   al_init_image_addon();
   janela = al_create_display(LARGURA_TELA, ALTURA_TELA);
   if (!janela){
-    fprintf(stderr, "Falha ao criar janela.\n");
+    fprintf(stderr, "Erro ao criar janela.\n");
     return false;
   }
 
@@ -19,39 +19,39 @@ bool inicializar()
 
   // Torna apto o uso de mouse na aplicação
   if (!al_install_mouse()){
-    fprintf(stderr, "Falha ao inicializar o mouse.\n");
+    fprintf(stderr, "Erro ao inicializar o mouse.\n");
     al_destroy_display(janela);
     return false;
   }
 
   // Atribui o cursor padrão do sistema na aplicação
   if (!al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT)){
-    fprintf(stderr, "Falha ao atribuir ponteiro do mouse.\n");
+    fprintf(stderr, "Erro ao atribuir ponteiro do mouse.\n");
     al_destroy_display(janela);
     return false;
   }
 
   // Torna apto o uso do teclado na aplicação
   if (!al_install_keyboard()){
-    fprintf(stderr, "Falha ao inicializar o teclado.\n");
+    fprintf(stderr, "Erro ao inicializar o teclado.\n");
     return false;
   }
 
   if (!al_install_audio())
   {
-    fprintf(stderr, "Falha ao inicializar áudio.\n");
+    fprintf(stderr, "Erro ao inicializar áudio.\n");
     return false;
   }
 
   if (!al_init_acodec_addon())
   {
-    fprintf(stderr, "Falha ao inicializar codecs de áudio.\n");
+    fprintf(stderr, "Erro ao inicializar codecs de áudio.\n");
     return false;
   }
 
   if (!al_reserve_samples(1))
   {
-    fprintf(stderr, "Falha ao alocar canais de áudio.\n");
+    fprintf(stderr, "Erro ao alocar canais de áudio.\n");
     return false;
   }
 
@@ -61,17 +61,18 @@ bool inicializar()
 
   if (!sample[0] || !sample[1] || !sample[2])
   {
-    fprintf(stderr, "Falha ao carregar samples.\n");
+    fprintf(stderr, "Erro ao carregar samples.\n");
     al_destroy_display(janela);
     al_destroy_sample(sample[0]);
     al_destroy_sample(sample[1]);
+    al_destroy_sample(sample[2]);
     return false;
   }
 
   // Cria a fila de eventos na aplicação
   fila_eventos = al_create_event_queue();
   if (!fila_eventos){
-    fprintf(stderr, "Falha ao inicializar a fila de eventos.\n");
+    fprintf(stderr, "Erro ao inicializar a fila de eventos.\n");
     al_destroy_display(janela);
     return false;
   }
@@ -79,7 +80,7 @@ bool inicializar()
   // Cria o timer na aplicação
   timer = al_create_timer(0.01);
   if (!timer){
-    fprintf(stderr, "Falha ao criar timer.\n");
+    fprintf(stderr, "Erro ao criar timer.\n");
     al_destroy_event_queue(fila_eventos);
     al_destroy_display(janela);
     return false;
@@ -96,20 +97,31 @@ bool inicializar()
 
 bool carregar_imagens()
 {
-  lanca.imagem[0] = al_load_bitmap("img/Lança(70X70).png");
-  lanca.imagem[1] = al_load_bitmap("img/Lança(70X70)2.png");
+  lanca.imagem[0] = al_load_bitmap("img/Lanca-Cond1.png");
+  lanca.imagem[1] = al_load_bitmap("img/Lanca-Cond2.png");
   lanca.imagem_ativa = lanca.imagem[0];
   if(!lanca.imagem_ativa){
     printf("Erro ao carregar imagem da lança\n" );
   }
 
-  fase1_entradas = al_load_bitmap("img/Entradas_Fase1.bmp");
+  // Alocando os backgrounds
+  backgrounds_T.imagem[0] = al_load_bitmap("img/Entradas-Transparencia.bmp");
+  backgrounds_T.imagem[1] = al_load_bitmap("img/Mapa-Transparencia.bmp");
+  backgrounds_T.imagem[2] = al_load_bitmap("img/Fase-Transparencia.bmp");
+  backgrounds_T.ativo[0] = backgrounds_T.imagem[0];
+  backgrounds_T.ativo[1] = backgrounds_T.imagem[1];
 
+  backgrounds.imagem[0] = al_load_bitmap("img/Tela_Inicial.png");
+  backgrounds.imagem[1]  = al_load_bitmap("img/Mapa.bmp");
+  backgrounds.imagem[2]  = al_load_bitmap("img/Fase.bmp");
+  backgrounds.imagem[3]  = al_load_bitmap("img/you-win.bmp");
+  backgrounds.imagem[4]  = al_load_bitmap("img/game-over.bmp");
+  backgrounds.ativo[0] = backgrounds.imagem[0];
   //javali.pos_x = 90;
   //javali.pos_y = 90;
 
   javali.pos_x = 200;
-  javali.pos_y = 350;
+  javali.pos_y = 400;
 
   javali.imagem_esquerda[0] = al_load_bitmap("img/javali/4.png");
   javali.imagem_esquerda[1] = al_load_bitmap("img/javali/4.png");
@@ -137,20 +149,11 @@ bool carregar_imagens()
   javali.imagem_morto[3] = al_load_bitmap("img/javali/morto2.png");
   if (!javali.imagem_morto[0] || !javali.imagem_morto[1] || !javali.imagem_morto[2] || !javali.imagem_morto[3])
   {
-    printf("erro ao carregar imagens javali morto");
+    printf("Erro ao carregar imagens javali morto");
     return false;
   }
 
   javali.imagem_ativa = javali.imagem_direita[0];
-
-  // Alocando os backgrounds
-  background.tela1 = al_load_bitmap("img/Tela_Inicial.png");
-  background_tela1.tela1 = al_load_bitmap("img/tela2-mapa.bmp");
-  background_tela1.tela2 = al_load_bitmap("img/Trasparencia_Fase1.bmp");
-
-  // Alocamos o botão para ajuda
-  botao_ajuda.desativado = al_load_bitmap("img/BT_Ajuda_Desativado.png");
-  botao_ajuda.ativado = al_load_bitmap("img/BT_Ajuda_Ativado.png");
 
   // Alocamos o botão para novo jogo
   botao_novo.desativado = al_load_bitmap("img/BT_Novo_Desativado.png");
@@ -167,7 +170,7 @@ bool carregar_imagens()
   personagem.imagem_baixo[3] = al_load_bitmap("img/caveman/caveman01.png");
   if (!personagem.imagem_baixo[0] || !personagem.imagem_baixo[1] || !personagem.imagem_baixo[2] || !personagem.imagem_baixo[3])
   {
-    printf("erro ao carregar imagens personagem baixo");
+    printf("Erro ao carregar imagens personagem baixo");
     return false;
   }
 
@@ -177,7 +180,7 @@ bool carregar_imagens()
   personagem.imagem_esquerda[3] = al_load_bitmap("img/caveman/caveman05.png");
   if (!personagem.imagem_esquerda[0] || !personagem.imagem_esquerda[1] || !personagem.imagem_esquerda[2] || !personagem.imagem_esquerda[3])
   {
-    printf("erro ao carregar imagem personagem esquerda");
+    printf("Erro ao carregar imagem personagem esquerda");
     return false;
   }
 
@@ -187,7 +190,7 @@ bool carregar_imagens()
   personagem.imagem_direita[3] = al_load_bitmap("img/caveman/caveman08.png");
   if (!personagem.imagem_direita[0] || !personagem.imagem_direita[1] || !personagem.imagem_direita[2] || !personagem.imagem_direita[3])
   {
-    printf("erro ao carregar imagem personagem direita");
+    printf("Erro ao carregar imagem personagem direita");
     return false;
   }
 
@@ -197,14 +200,7 @@ bool carregar_imagens()
   personagem.imagem_cima[3] = al_load_bitmap("img/caveman/caveman11.png");
   if (!personagem.imagem_cima[0] || !personagem.imagem_cima[1] || !personagem.imagem_cima[2] || !personagem.imagem_cima[3])
   {
-    printf("erro ao carregar imagem personagem cima");
-    return false;
-  }
-
-  personagem.imagem_morto[0] = al_load_bitmap("img/javali/morto1.png");
-  if (!personagem.imagem_cima[0] || !personagem.imagem_cima[1] || !personagem.imagem_cima[2] || !personagem.imagem_cima[3])
-  {
-    printf("erro ao carregar imagem personagem cima");
+    printf("Erro ao carregar imagem personagem cima");
     return false;
   }
 
@@ -212,19 +208,13 @@ bool carregar_imagens()
 
   if (!botao_novo.desativado || !botao_novo.ativado)
   {
-    fprintf(stderr, "Falha ao criar botão novo jogo.\n");
-    al_destroy_display(janela);
-    return false;
-  }
-  if (!botao_ajuda.desativado || !botao_ajuda.ativado)
-  {
-    fprintf(stderr, "Falha ao criar botão de ajuda.\n");
+    fprintf(stderr, "Erro ao criar botão novo jogo.\n");
     al_destroy_display(janela);
     return false;
   }
   if (!botao_sair.desativado || !botao_sair.ativado)
   {
-    fprintf(stderr, "Falha ao criar botão de saída.\n");
+    fprintf(stderr, "Erro ao criar botão de saída.\n");
     al_destroy_display(janela);
     return false;
   }
@@ -236,19 +226,20 @@ void finalizar()
 {
   // Desaloca os recursos utilizados na aplicação
   al_destroy_bitmap(botao_novo.ativado);
-  al_destroy_bitmap(botao_ajuda.ativado);
-  al_destroy_bitmap(botao_sair.ativado);
   al_destroy_bitmap(botao_novo.desativado);
-  al_destroy_bitmap(botao_ajuda.desativado);
+  al_destroy_bitmap(botao_sair.ativado);
   al_destroy_bitmap(botao_sair.desativado);
-  al_destroy_bitmap(background.tela1);
-  al_destroy_bitmap(background.tela2);
-  al_destroy_bitmap(background_tela1.tela1);
-  al_destroy_bitmap(background_tela1.tela2);
-  al_destroy_bitmap(personagem.imagem_morto[0]);
-  al_destroy_bitmap(personagem.imagem_morto[1]);
-  al_destroy_bitmap(personagem.imagem_morto[2]);
-  al_destroy_bitmap(personagem.imagem_morto[3]);
+
+  al_destroy_bitmap(backgrounds.imagem[0]);
+  al_destroy_bitmap(backgrounds.imagem[1]);
+  al_destroy_bitmap(backgrounds.imagem[2]);
+  al_destroy_bitmap(backgrounds.imagem[3]);
+  al_destroy_bitmap(backgrounds.imagem[4]);
+
+  al_destroy_bitmap(backgrounds_T.imagem[0]);
+  al_destroy_bitmap(backgrounds_T.imagem[1]);
+  al_destroy_bitmap(backgrounds_T.imagem[2]);
+
   al_destroy_bitmap(personagem.imagem_direita[0]);
   al_destroy_bitmap(personagem.imagem_direita[1]);
   al_destroy_bitmap(personagem.imagem_direita[2]);
@@ -257,6 +248,31 @@ void finalizar()
   al_destroy_bitmap(personagem.imagem_esquerda[1]);
   al_destroy_bitmap(personagem.imagem_esquerda[2]);
   al_destroy_bitmap(personagem.imagem_esquerda[3]);
+  al_destroy_bitmap(personagem.imagem_baixo[0]);
+  al_destroy_bitmap(personagem.imagem_baixo[1]);
+  al_destroy_bitmap(personagem.imagem_baixo[2]);
+  al_destroy_bitmap(personagem.imagem_baixo[3]);
+  al_destroy_bitmap(personagem.imagem_cima[0]);
+  al_destroy_bitmap(personagem.imagem_cima[1]);
+  al_destroy_bitmap(personagem.imagem_cima[2]);
+  al_destroy_bitmap(personagem.imagem_cima[3]);
+
+  al_destroy_bitmap(javali.imagem_morto[0]);
+  al_destroy_bitmap(javali.imagem_morto[1]);
+  al_destroy_bitmap(javali.imagem_morto[2]);
+  al_destroy_bitmap(javali.imagem_morto[3]);
+  al_destroy_bitmap(javali.imagem_direita[0]);
+  al_destroy_bitmap(javali.imagem_direita[1]);
+  al_destroy_bitmap(javali.imagem_direita[2]);
+  al_destroy_bitmap(javali.imagem_direita[3]);
+  al_destroy_bitmap(javali.imagem_esquerda[0]);
+  al_destroy_bitmap(javali.imagem_esquerda[1]);
+  al_destroy_bitmap(javali.imagem_esquerda[2]);
+  al_destroy_bitmap(javali.imagem_esquerda[3]);
+
+  al_destroy_bitmap(lanca.imagem[0]);
+  al_destroy_bitmap(lanca.imagem[1]);
+
   al_destroy_timer(timer);
   al_destroy_sample(sample[0]);
   al_destroy_sample(sample[1]);
@@ -274,7 +290,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
   }
   switch (personagem.orientacao) {
     case 'D':
-      cor = al_get_pixel(background_exibir2, personagem.pos_x + 1, personagem.pos_y);
+      cor = al_get_pixel(backgrounds_T.ativo[1], personagem.pos_x + 1, personagem.pos_y);
       al_unmap_rgb(cor, &r, &g, &b);
 
       if (r < 100 || g < 100 || b < 100){
@@ -286,7 +302,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
       }
       break;
     case 'E':
-      cor = al_get_pixel(background_exibir2, personagem.pos_x - 1, personagem.pos_y);
+      cor = al_get_pixel(backgrounds_T.ativo[1], personagem.pos_x - 1, personagem.pos_y);
       al_unmap_rgb(cor, &r, &g, &b);
 
       if (r < 100 || g < 100 || b < 100){
@@ -298,7 +314,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
       }
       break;
     case 'C':
-      cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y - 1);
+      cor = al_get_pixel(backgrounds_T.ativo[1], personagem.pos_x, personagem.pos_y - 1);
       al_unmap_rgb(cor, &r, &g, &b);
 
       if (r < 100 || g < 100 || b < 100){
@@ -310,7 +326,7 @@ struct objeto verifica_movimentacao(struct objeto personagem)
       }
       break;
     case 'B':
-      cor = al_get_pixel(background_exibir2, personagem.pos_x, personagem.pos_y + 1);
+      cor = al_get_pixel(backgrounds_T.ativo[1], personagem.pos_x, personagem.pos_y + 1);
       al_unmap_rgb(cor, &r, &g, &b);
 
       if (r < 100 || g < 100 || b < 100){
@@ -325,8 +341,8 @@ struct objeto verifica_movimentacao(struct objeto personagem)
   return personagem;
 }
 
-int verifica_fim(ALLEGRO_BITMAP *imagem){
-  cor = al_get_pixel(imagem, personagem.pos_x-5, personagem.pos_y-5);
+int verifica_fim(){
+  cor = al_get_pixel(backgrounds_T.ativo[0], personagem.pos_x-5, personagem.pos_y-5);
   al_unmap_rgb(cor, &r, &g, &b);
   if (r < 10 && g < 10 && b < 10){
     return 0;
@@ -364,8 +380,11 @@ void move_lanca(objeto_voador *lanca, int *morto){
     lanca->ativo = 0;
     return;
   }
-  lanca->pos_x = lanca->pos_x + lanca->pos_incx;
-  lanca->pos_y = lanca->pos_y + lanca->pos_incy;
+
+  printf("%d %d\n", lanca->pos_incx, lanca->pos_incy);
+  lanca->pos_x += 10;
+  lanca->pos_y += -10;
+
   verifica_colisao_lanca(lanca, morto);
 }
 
@@ -401,8 +420,7 @@ int tela_inicial(int loop)
 {
   int no_novo = 0, no_ajuda = 0, no_sair = 0, novo_jogo = 0;
 
-  // aloca o background da tela inicial
-  background_exibir = background.tela1;
+  backgrounds.ativo[0] = backgrounds.imagem[0];
   al_start_timer(timer);
 
   while (!loop){
@@ -463,7 +481,7 @@ int tela_inicial(int loop)
     }
 
     // Desenha o background na tela
-    al_draw_bitmap(background_exibir, 0, 0, 0);
+    al_draw_bitmap(backgrounds.ativo[0], 0, 0, 0);
 
     // aloca os botões ativos
     if (no_novo == 1 )
@@ -506,10 +524,9 @@ int fase_1()
   int loop = 0;
 
   // aloca o background da 1ª fase
-  background_exibir = background_tela1.tela1;
+  backgrounds.ativo[0] = backgrounds.imagem[1];
+  backgrounds_T.ativo[1] = backgrounds_T.imagem[1];
 
-  // aloca o background da 1ª fase
-  background_exibir2 = background_tela1.tela2;
   al_start_timer(timer);
   while (!loop){
     // Verificamos se há eventos na fila
@@ -518,7 +535,6 @@ int fase_1()
       // Se o evento foi fechar o jogo
       if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
         return -1;
-        loop = 1;
       }
       if(evento.type == ALLEGRO_EVENT_KEY_UP)
       {
@@ -554,7 +570,7 @@ int fase_1()
         }
       }
       if(evento.type == ALLEGRO_EVENT_TIMER){
-        if(!verifica_fim(fase1_entradas)){
+        if(!verifica_fim()){
           al_stop_sample(&ret_id);
 
           al_play_sample(sample[1], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, ret_id);
@@ -564,7 +580,7 @@ int fase_1()
     }
 
     //Desenha background
-    al_draw_bitmap(background_exibir, 0,0,0);
+    al_draw_bitmap(backgrounds.ativo[0], 0,0,0);
     //Desenha Personagem quando pressionado o botão novo jogo
     al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
     // Atualiza a tela
@@ -575,9 +591,6 @@ int fase_1()
 }
 
 int fase_2(){
-
-  background_exibir = al_load_bitmap("img/Tela-campo.bmp");
-  background_exibir2 = al_load_bitmap("img/Fase2_transparencia.bmp");
   bool entrou = false;
 
 	personagem.pos_x = 106, personagem.pos_y = 497;
@@ -589,6 +602,10 @@ int fase_2(){
   int pos_esq = 0;
   int morto = 0;
   int morto_p = 0;
+  int foi = 0;
+
+  backgrounds.ativo[0] = backgrounds.imagem[2];
+  backgrounds_T.ativo[1] = backgrounds_T.imagem[2];
 
   al_start_timer(timer);
   while (!loop){
@@ -649,7 +666,7 @@ int fase_2(){
         }
       }
     }
-    al_draw_bitmap(background_exibir, 0,0,0);
+    al_draw_bitmap(backgrounds.ativo[0], 0,0,0);
     al_draw_bitmap(personagem.imagem_ativa, personagem.pos_x, personagem.pos_y, 0);
 
     if (morto != 1 || (morto == 1 && javali.frame_ativo < 3))
@@ -684,11 +701,12 @@ int fase_2(){
     } else if (morto == 1) {
       javali.imagem_ativa = javali.imagem_morto[javali.frame_ativo];
       al_draw_bitmap(javali.imagem_ativa, javali.pos_x, javali.pos_y, 0);
-      if (morto_p == 1){
-        clock1 = 0;
+      if (morto_p == 1 && foi != 1){
         al_stop_sample(&ret_id);
 
         al_play_sample(sample[2], 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, ret_id);
+        clock1 = 0;
+        foi = 1;
       }
       if (clock1%500 == 0 && morto_p == 1){
         you_win();
@@ -714,7 +732,7 @@ void you_win (){
   clock1 = 0;
   int loop = 0;
   // aloca o background da tela inicial
-  background_exibir = background.tela1;
+  backgrounds.ativo[0] = backgrounds.imagem[3];
   al_start_timer(timer);
   while (!loop){
     // Verificamos se há eventos na fila
@@ -722,7 +740,7 @@ void you_win (){
       al_wait_for_event(fila_eventos, &evento);
       // Se o evento foi fechar o jogo
       if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-        return -1;
+        return;
       }
       if(evento.type == ALLEGRO_EVENT_TIMER){
         clock1++;
@@ -730,10 +748,11 @@ void you_win (){
     }
 
     if (clock1%500 == 0){
+      clock1 = 0;
       return;
     }
 
-    al_draw_bitmap(background_exibir, 0,0,0);
+    al_draw_bitmap(backgrounds.ativo[0], 0,0,0);
     al_flip_display();
   }
 }
@@ -742,7 +761,7 @@ void game_over (){
   clock1 = 0;
   int loop = 0;
   // aloca o background da tela inicial
-  background_exibir = background.tela1;
+  backgrounds.ativo[0] = backgrounds.imagem[4];
   al_start_timer(timer);
   while (!loop){
     // Verificamos se há eventos na fila
@@ -750,7 +769,7 @@ void game_over (){
       al_wait_for_event(fila_eventos, &evento);
       // Se o evento foi fechar o jogo
       if(evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-        return -1;
+        return;
       }
       if(evento.type == ALLEGRO_EVENT_TIMER){
         clock1++;
@@ -761,7 +780,7 @@ void game_over (){
       return;
     }
 
-    al_draw_bitmap(background_exibir, 0,0,0);
+    al_draw_bitmap(backgrounds.ativo[0], 0,0,0);
     al_flip_display();
   }
 }
