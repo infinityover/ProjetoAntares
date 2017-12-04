@@ -356,8 +356,9 @@ void cria_lanca(objeto_voador *lanca, ALLEGRO_EVENT *evento){
   lanca->pos_x = personagem.pos_x;
   lanca->pos_y = personagem.pos_y;
   lanca->ativo = 1;
-  lanca->pos_incy = (evento->mouse.y - personagem.pos_y)/50;
-  lanca->pos_incx = (evento->mouse.x - personagem.pos_x)/50;
+  float todo = abs(evento->mouse.x - personagem.pos_x) + abs(evento->mouse.y - personagem.pos_y);
+  lanca->pos_incy = (evento->mouse.y - personagem.pos_y) / todo;
+  lanca->pos_incx = (evento->mouse.x - personagem.pos_x) / todo;
 
   if (evento->mouse.y < personagem.pos_y){
     A = personagem.pos_x - LARGURA_TELA;
@@ -381,9 +382,8 @@ void move_lanca(objeto_voador *lanca, int *morto){
     return;
   }
 
-  printf("%d %d\n", lanca->pos_incx, lanca->pos_incy);
-  lanca->pos_x += 10;
-  lanca->pos_y += -10;
+  lanca->pos_x += (lanca->pos_incx)*10;
+  lanca->pos_y += (lanca->pos_incy)*10;
 
   verifica_colisao_lanca(lanca, morto);
 }

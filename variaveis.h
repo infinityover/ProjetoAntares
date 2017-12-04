@@ -36,8 +36,8 @@ typedef struct objeto_voador{
     int ativo;
     int pos_x;
     int pos_y;
-    int pos_incx;
-    int pos_incy;
+    float pos_incx;
+    float pos_incy;
     int frame_ativo;
     float angulo;
     ALLEGRO_BITMAP *imagem_ativa;
