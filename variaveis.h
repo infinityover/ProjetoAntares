@@ -73,4 +73,3 @@ objeto javali;
 
 const int LARGURA_TELA = 1000;
 const int ALTURA_TELA = 600;
-#define PI 3.14159265

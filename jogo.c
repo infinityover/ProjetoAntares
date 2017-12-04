@@ -16,10 +16,10 @@ int main(void){
   int retorno_tela_inicial = 0, retorno_fase1 = 0, retorn_fase2 = 0, loop = 0;
 
   if (!inicializar())
-      return -1;
+    return -1;
 
   if (!carregar_imagens())
-      return -1;
+    return -1;
 
   retorno_tela_inicial = tela_inicial(loop);
 
@@ -30,22 +30,18 @@ int main(void){
   }
 
   while (retorno_tela_inicial != -1 || retorno_fase1 != -1 || retorn_fase2 != -1) {
-
-
     retorno_fase1 = fase_1(retorno_tela_inicial, loop);
 
     if (retorno_fase1 == -1)
     {
-    	finalizar();
-    	return -1;
+    	break;
     }
 
     retorn_fase2 = fase_2();
 
     if (retorn_fase2 == -1)
     {
-      finalizar();
-      return -1;
+      break;
     }
   }
 
